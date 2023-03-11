@@ -1,0 +1,58 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+from waflib import Utils
+import os
+
+top = '.'
+PROJECT_NAME = 'z'
+
+def options(opt):
+	# stub
+	return
+
+def configure(conf):
+	conf.define('HAVE_SYS_TYPES_H',1)
+	conf.define('HAVE_STDINT_H',1)
+	conf.define('HAVE_STDDEF_H',1)
+	conf.define('_LARGEFILE64_SOURCE',1)
+	conf.define('Z_HAVE_UNISTD_H',1)
+
+def build(bld):
+	source = [
+		'adler32.c',
+		'compress.c',
+		'crc32.c',
+		'deflate.c',
+		'gzclose.c',
+		'gzlib.c',
+		'gzread.c',
+		'gzwrite.c',
+		'inflate.c',
+		'infback.c',
+		'inftrees.c',
+		'inffast.c',
+		'trees.c',
+		'uncompr.c',
+		'zutil.c'
+	]
+
+	includes = [
+		'.'
+	]
+
+	defines = []
+
+	libs = []
+
+	bld.stlib(
+		source   = source,
+		target   = PROJECT_NAME,
+		name     = PROJECT_NAME,
+		features = 'c cxx',
+		includes = includes,
+		defines  = defines,
+		use      = libs,
+		idx      = bld.get_taskgen_count()
+	)
+

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: Sound management functions. Exposes a list of available sounds.
 //
@@ -9,7 +9,7 @@
 #include "soundsystem.h"
 #include "mmsystem.h"
 #include "filesystem.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "hammer.h"
 #include "HammerScene.h"
 #include "ScenePreviewDlg.h"

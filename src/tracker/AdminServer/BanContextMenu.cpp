@@ -10,7 +10,7 @@
 #include <vgui/IInput.h>
 #include <vgui/IPanel.h>
 #include <vgui/ISurface.h>
-#include <KeyValues.h>
+#include <keyvalues.h>
 
 using namespace vgui;
 

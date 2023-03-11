@@ -19,7 +19,7 @@
 #include "game/client/IGameClientExports.h"
 #include "gameui/igameconsole.h"
 #include "inputsystem/iinputsystem.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "filesystem/IXboxInstaller.h"
 
 #ifdef _X360

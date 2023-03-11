@@ -12,7 +12,7 @@
 #include "vgui_controls/textentry.h"
 #include "vgui/ilocalize.h"
 #include "vgenericconfirmation.h"
-#include "vgui/isurface.h"
+#include "vgui/ISurface.h"
 #include "puzzlemaker/puzzlemaker.h"
 #include "vgui_controls/label.h"
 #include "gameui/portal2/vdialoglistbutton.h"

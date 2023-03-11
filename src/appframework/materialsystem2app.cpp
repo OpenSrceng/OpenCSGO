@@ -9,7 +9,7 @@
 #ifdef _WIN32
 
 #include "appframework/materialsystem2app.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "materialsystem2/IMaterialSystem2.h"
 #include "tier0/dbg.h"
 #include "tier0/icommandline.h"

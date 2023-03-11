@@ -26,7 +26,7 @@
 #include "tier1/utlbuffer.h"
 #include "filesystem_init.h"
 #include "tier0/icommandline.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "appframework/IAppSystemGroup.h"
 #include "tier1/smartptr.h"
 #if defined( _X360 )
@@ -1093,25 +1093,7 @@ FSReturnCode_t FileSystem_GetFileSystemDLLName( char *pFileSystemDLL, int nMaxLe
 		return SetupFileSystemError( false, FS_INVALID_PARAMETERS, "FileSystem_GetExecutableDir failed." );
 
 	// Assume we'll use local files
-	Q_snprintf( pFileSystemDLL, nMaxLen, "%s%cfilesystem_stdio" DLL_EXT_STRING, executablePath, CORRECT_PATH_SEPARATOR );
-
-	#if !defined( _X360 )
-
-		// Use filsystem_steam if it exists?
-		#if defined( OSX ) || defined( LINUX )
-			struct stat statBuf;
-		#endif
-		if (
-			#if defined( OSX ) || defined( LINUX )
-				stat( pFileSystemDLL, &statBuf ) != 0
-			#else
-				_access( pFileSystemDLL, 0 ) != 0
-			#endif
-		) {
-			Q_snprintf( pFileSystemDLL, nMaxLen, "%s%cfilesystem_steam" DLL_EXT_STRING, executablePath, CORRECT_PATH_SEPARATOR );
-			bSteam = true;
-		}
-	#endif
+	Q_snprintf( pFileSystemDLL, nMaxLen, "%s%clibfilesystem_stdio" DLL_EXT_STRING, executablePath, CORRECT_PATH_SEPARATOR );
 
 	return FS_OK;
 }

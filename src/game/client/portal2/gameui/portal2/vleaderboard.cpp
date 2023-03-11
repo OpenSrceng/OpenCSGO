@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -22,7 +22,7 @@
 #include "VHybridButton.h"
 #include "VDropDownMenu.h"
 #include "VGameSettings.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 
 #include "fmtstr.h"
 #include "checksum_crc.h"

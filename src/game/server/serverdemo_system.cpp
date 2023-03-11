@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "serverdemo_system.h"
 #include "serverdemo_types.h"
-#include "vstdlib/IKeyValuesSystem.h"
+#include "vstdlib/ikeyvaluessystem.h"
 #include "tier1/circularbuffer.h"
 #include "toolutils/enginetools_int.h"
 #include "toolframework/itoolframework.h"

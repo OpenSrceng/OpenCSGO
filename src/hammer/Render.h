@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 #define RENDER_H
 #pragma once
 
-#include "Color.h"
+#include "color.h"
 #include "utlstack.h"
 #include "hammer_mathlib.h"
 #include "MaterialSystem\imesh.h"

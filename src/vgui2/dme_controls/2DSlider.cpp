@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2008, Valve Corporation, All rights reserved. ======
+//======= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ======
 //
 // Purpose: A 2D Slider
 //
@@ -6,7 +6,7 @@
 
 
 // Valve includes
-#include <KeyValues.h>
+#include <keyvalues.h>
 
 #include <vgui/MouseCode.h>
 #include <vgui/IBorder.h>

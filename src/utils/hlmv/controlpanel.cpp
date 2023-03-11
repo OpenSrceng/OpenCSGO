@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
@@ -36,7 +36,7 @@
 #include <mxtk/mx.h>
 #include <mxtk/mxBmp.h>
 #include "vphysics_interface.h"
-#include "UtlVector.h"
+#include "utlvector.h"
 #include "UtlSymbol.h"
 #include "UtlBuffer.h"
 #include "attachments_window.h"

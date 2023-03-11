@@ -1,0 +1,110 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+from waflib import Utils
+import os
+
+top = '.'
+PROJECT_NAME = 'gameui'
+
+def options(opt):
+	# stub
+	return
+
+def configure(conf):
+	conf.define('GAMEUI_EXPORTS',1)
+	conf.define('NO_STEAM',1)
+
+def build(bld):
+	source = [
+		'BackgroundMenuButton.cpp',
+		'BasePanel.cpp',
+		'GameConsole.cpp',
+		'GameUI_Interface.cpp',
+		'ModInfo.cpp',
+		'MouseMessageForwardingPanel.cpp',
+		'../common/GameUI/ObjectList.cpp',
+		'PanelListPanel.cpp',
+		'RunGameEngine.cpp',
+		'../common/GameUI/scriptobject.cpp',
+		'Sys_Utils.cpp',
+		'TextEntryBox.cpp',
+		'TGAImagePanel.cpp',
+		'../public/vgui_controls/vgui_controls.cpp',
+		'VGuiSystemModuleLoader.cpp',
+		'BonusMapsDatabase.cpp',
+		'../common/language.cpp',
+		'../common/imageutils.cpp',
+		'SaveGameBrowserDialog.cpp',
+		'gameui_util.cpp',
+		'BitmapImagePanel.cpp',
+		'CommandCheckButton.cpp',
+		'CvarNegateCheckButton.cpp',
+		'../common/GameUI/cvarslider.cpp',
+		'CvarTextEntry.cpp',
+		'CvarToggleCheckButton.cpp',
+		'HapticControlBox.cpp',
+		'KeyToggleCheckButton.cpp',
+		'LabeledCommandComboBox.cpp',
+		'URLButton.cpp',
+		'vcontrolslistpanel.cpp',
+		'BenchmarkDialog.cpp',
+		'BonusMapsDialog.cpp',
+		'CommentaryDialog.cpp',
+		'CommentaryExplanationDialog.cpp',
+		'ContentControlDialog.cpp',
+		'CustomTabExplanationDialog.cpp',
+		'GameConsoleDialog.cpp',
+		'LoadGameDialog.cpp',
+		'MultiplayerAdvancedDialog.cpp',
+		'NewGameDialog.cpp',
+		'PlayerListDialog.cpp',
+		'SaveGameDialog.cpp',
+		'LoadCommentaryDialog.cpp',
+		'LoadingDialog.cpp',
+		'BaseSaveGameDialog.cpp',
+		'CreateMultiplayerGameBotPage.cpp',
+		'CreateMultiplayerGameDialog.cpp',
+		'CreateMultiplayerGameGameplayPage.cpp',
+		'CreateMultiplayerGameServerPage.cpp',
+		'OptionsDialog.cpp',
+		'OptionsSubAudio.cpp',
+		'OptionsSubDifficulty.cpp',
+		'OptionsSubGame.cpp',
+		'OptionsSubKeyboard.cpp',
+		'OptionsSubMouse.cpp',
+		'OptionsSubMultiplayer.cpp',
+		'OptionsSubPortal.cpp',
+		'OptionsSubVideo.cpp',
+		'OptionsSubVoice.cpp',
+		'../public/tier0/memoverride.cpp'
+	]
+
+	includes = [
+		'.',
+		'../public',
+		'../public/tier0',
+		'../public/tier1',
+		'../common/GameUI',
+		'../vgui2/include',
+		'../vgui2/controls'
+	]
+
+	defines = []
+
+	libs = ['tier0','vgui_controls','bitmap','tier1','tier2','tier3','interfaces','vstdlib','vtf','mathlib','SDL2','steam_api','matsys_controls','jpeg','png','z']
+
+	install_path = bld.env.LIBDIR
+
+	bld.shlib(
+		source   = source,
+		target   = PROJECT_NAME,
+		name     = PROJECT_NAME,
+		features = 'c cxx',
+		includes = includes,
+		defines  = defines,
+		use      = libs,
+		install_path = install_path,
+		idx      = bld.get_taskgen_count()
+	)
+

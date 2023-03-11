@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2009, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2009, Valve Corporation, All rights reserved. =======
 //
 // Declaration of CLogGraph, a utility for drawing logs in a graph with scale 
 // and offset.
@@ -11,12 +11,12 @@
 #pragma once
 #endif
 
-#include "vgui/VGUI.h"
+#include "vgui/vgui.h"
 #include "movieobjects/dmeclip.h"
 #include "movieobjects/dmelog.h"
 #include "materialsystem/materialsystemutil.h"
 #include "mathlib/beziercurve.h"
-#include "Color.h"
+#include "color.h"
 
 
 class CDmeGraphEditorCurve;

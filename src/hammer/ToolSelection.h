@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
@@ -15,7 +15,7 @@
 #include "Box3D.h"
 #include "MapClass.h"			// For CMapObjectList
 #include "ToolInterface.h"
-#include "UtlVector.h"
+#include "utlvector.h"
 
 
 class CMapWorld;

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2004, Valve LLC, All rights reserved. ============
+//========= Copyright ï¿½ 1996-2004, Valve LLC, All rights reserved. ============
 //
 //
 //=============================================================================
@@ -9,7 +9,7 @@
 #include "GlobalFunctions.h"
 #include "MapDisp.h"
 #include "DispShore.h"
-#include "UtlVector.h"
+#include "utlvector.h"
 #include "mapdoc.h"
 #include "mapworld.h"
 #include "mapsolid.h"

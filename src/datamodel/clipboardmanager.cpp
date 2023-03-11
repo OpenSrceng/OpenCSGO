@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -6,7 +6,7 @@
 
 #include "clipboardmanager.h"
 #include "datamodel.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 
 #ifndef POSIX
 #define USE_WINDOWS_CLIPBOARD

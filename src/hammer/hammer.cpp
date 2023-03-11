@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: The application object.
 //
@@ -45,7 +45,7 @@
 #include "tier0/dbg.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 #include "istudiorender.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "engine_launcher_api.h"
 #include "filesystem_init.h"
 #include "utlmap.h"

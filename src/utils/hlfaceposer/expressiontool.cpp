@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -27,7 +27,7 @@
 #include "tier1/strtools.h"
 #include "faceposer_models.h"
 #include "UtlBuffer.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "iscenetokenprocessor.h"
 #include "MatSysWin.h"
 #include "choreoviewcolors.h"

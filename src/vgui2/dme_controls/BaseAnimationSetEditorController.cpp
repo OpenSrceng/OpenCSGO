@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2006, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2006, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -6,7 +6,7 @@
 
 #include "dme_controls/BaseAnimationSetEditorController.h"
 #include "tier1/fmtstr.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "tier2/fileutils.h"
 #include "vgui_controls/FileOpenDialog.h"
 #include "vgui_controls/MessageBox.h"

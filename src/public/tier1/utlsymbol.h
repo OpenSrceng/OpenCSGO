@@ -267,7 +267,7 @@ private:
 typedef void* FileNameHandle_t;
 
 // Symbol table for more efficiently storing filenames by breaking paths and filenames apart.
-// Refactored from BaseFileSystem.h
+// Refactored from Basefilesystem.h
 class CUtlFilenameSymbolTable
 {
 	// Internal representation of a FileHandle_t

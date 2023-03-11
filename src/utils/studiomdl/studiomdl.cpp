@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2008, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
@@ -67,7 +67,7 @@
 #include "mdllib/mdllib.h"
 #include "perfstats.h"
 #include "worldsize.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "compileclothproxy.h"
 #include "movieobjects/dmemodel.h"
 #include "fbxutils/dmfbxserializer.h"

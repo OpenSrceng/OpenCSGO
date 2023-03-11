@@ -3218,12 +3218,14 @@ void *KeyValues::operator new( size_t iAllocSize, int nBlockUse, const char *pFi
 
 void KeyValues::operator delete( void *pMem )
 {
-	KeyValuesSystem()->FreeKeyValuesMemory( (KeyValues *)pMem );
+	if( pMem )
+		KeyValuesSystem()->FreeKeyValuesMemory( (KeyValues *)pMem );
 }
 
 void KeyValues::operator delete( void *pMem, int nBlockUse, const char *pFileName, int nLine )
 {
-	KeyValuesSystem()->FreeKeyValuesMemory( (KeyValues *)pMem );
+	if( pMem )
+		KeyValuesSystem()->FreeKeyValuesMemory( (KeyValues *)pMem );
 }
 
 #include "tier0/memdbgon.h"

@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
@@ -10,7 +10,7 @@
 #include "materialsystem/IMaterial.h"
 #include "portalrenderable_flatbasic.h"
 #include "c_prop_portal.h"
-#include <KeyValues.h>
+#include <keyvalues.h>
 
 #include "imaterialproxydict.h"
 // memdbgon must be the last include file in a .cpp file!!!

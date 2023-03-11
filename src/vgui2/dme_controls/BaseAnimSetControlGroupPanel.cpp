@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 #include "vgui_controls/Button.h"
 #include "vgui_controls/ImageList.h"
 #include "vgui_controls/Tooltip.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "movieobjects/dmeanimationset.h"
 #include "movieobjects/dmegamemodel.h"
 #include "movieobjects/dmerig.h"

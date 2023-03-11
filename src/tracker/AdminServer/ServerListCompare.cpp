@@ -10,7 +10,7 @@
 #include "serverpage.h"
 
 #include <VGUI_ListPanel.h>
-#include <VGUI_KeyValues.h>
+#include <VGUI_keyvalues.h>
 
 
 //-----------------------------------------------------------------------------

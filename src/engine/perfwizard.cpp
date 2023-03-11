@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -13,7 +13,7 @@
 #include "client.h"
 #include "filesystem.h"
 #include "filesystem_engine.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "vstdlib/ICommandLine.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

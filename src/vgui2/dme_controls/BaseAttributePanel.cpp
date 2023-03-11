@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+//====== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. =======//
 //
 // Purpose: base class for all element attribute panels
 //    An attribute panel is a one line widget that can be used by a list
@@ -10,7 +10,7 @@
 
 #include "dme_controls/BaseAttributePanel.h"
 #include "dme_controls/attributewidgetfactory.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "vgui_controls/Label.h"
 #include "movieobjects/dmeeditortypedictionary.h"
 #include "dme_controls/inotifyui.h"

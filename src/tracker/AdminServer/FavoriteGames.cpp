@@ -19,7 +19,7 @@
 #include "tier1/utlbuffer.h"
 
 #include <VGUI_Controls.h>
-#include <VGUI_KeyValues.h>
+#include <VGUI_keyvalues.h>
 #include <VGUI_ListPanel.h>
 #include <VGUI_IScheme.h>
 #include <VGUI_IVGui.h>

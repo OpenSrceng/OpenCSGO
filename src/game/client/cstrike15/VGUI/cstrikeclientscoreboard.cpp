@@ -15,7 +15,7 @@
 #include "backgroundpanel.h"
 #include "clientmode.h"
 
-#include <KeyValues.h>
+#include <keyvalues.h>
 
 #include <vgui/IScheme.h>
 #include <vgui/ILocalize.h>

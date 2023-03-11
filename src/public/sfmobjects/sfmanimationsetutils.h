@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2004, Valve Corporation, All rights reserved. =======
 //
 // NOTE: This is a cut-and-paste hack job to get animation set construction
 // working from a commandline tool. It came from tools/ifm/createsfmanimation.cpp
@@ -13,7 +13,7 @@
 #pragma once
 #endif
 
-#include "tier1/UtlVector.h"
+#include "tier1/utlvector.h"
 #include "tier1/UtlDict.h"
 #include "tier1/UtlString.h"
 #include "datamodel/dmattributevar.h"

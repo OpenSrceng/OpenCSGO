@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -15,7 +15,7 @@
 #include "mathlib/mathlib.h"
 #include "choreochannel.h"
 #include "choreoactor.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "scriplib.h"
 
 #include "eventproperties_expression.h"

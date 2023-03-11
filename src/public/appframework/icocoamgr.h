@@ -12,7 +12,7 @@
 
 
 #include "tier0/threadtools.h"
-#include "appframework/IAppSystem.h"
+#include "appframework/iappsystem.h"
 #include "glmgr/glmgr.h"
 
 // if you rev this version also update materialsystem/cmaterialsystem.cpp CMaterialSystem::Connect as it defines the string directly

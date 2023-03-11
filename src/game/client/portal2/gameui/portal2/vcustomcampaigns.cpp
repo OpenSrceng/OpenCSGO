@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -6,11 +6,11 @@
 
 #include "VCustomCampaigns.h"
 #include "VGenericPanelList.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "VFooterPanel.h"
 #include "VHybridButton.h"
 #include "EngineInterface.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "fmtstr.h"
 #include "vgui/ISurface.h"
 #include "vgui/IBorder.h"

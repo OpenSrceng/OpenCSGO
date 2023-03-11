@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -14,7 +14,7 @@
 #include "materialsystem/ITexture.h"
 #include "bitmap/imageformat.h"
 #include "vtf/vtf.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "vgui_surfacelib/TextureDictionary.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

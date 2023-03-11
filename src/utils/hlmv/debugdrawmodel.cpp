@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
@@ -11,7 +11,7 @@
 #include "matsyswin.h"
 #include "viewersettings.h"
 #include "materialsystem/imaterialvar.h"
-#include "tier1/UtlSortVector.h"
+#include "tier1/utlsortvector.h"
 #include "tier2/tier2.h"
 
 #define NORMAL_LENGTH .5f

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: Manages the set of application configuration options.
 //
@@ -9,7 +9,7 @@
 #include "hammer.h"
 #include "MainFrm.h"
 #include "mapdoc.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "ConfigManager.h"
 #include "GlobalFunctions.h"
 #include "CustomMessages.h"

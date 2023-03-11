@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
@@ -25,7 +25,7 @@
 #include "ifaceposerworkspace.h"
 #include "expclass.h"
 #include "PhonemeEditor.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "ExpressionTool.h"
 #include "ControlPanel.h"
 #include "choreowidgetdrawhelper.h"
@@ -1799,7 +1799,7 @@ int MDLViewer::handleEvent (mxEvent *event)
 				
 			case IDC_HELP_ABOUT:
 				mxMessageBox (this,
-					"v1.0  Copyright © 1996-2007, Valve Corporation. All rights reserved.\r\nBuild Date: " __DATE__ "",
+					"v1.0  Copyright ï¿½ 1996-2007, Valve Corporation. All rights reserved.\r\nBuild Date: " __DATE__ "",
 					"Valve Face Poser", 
 					MX_MB_OK | MX_MB_INFORMATION);
 				break;

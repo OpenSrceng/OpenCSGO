@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2010, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2010, Valve Corporation, All rights reserved. ============//
 //
 //
 //=============================================================================//
@@ -11,7 +11,7 @@
 #include "vgui/ISurface.h"
 #include "vgui/IVGui.h"
 #include "vgui/ilocalize.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "VGenericConfirmation.h"
 #include "bitmap/tgaloader.h"
 #include "steamcloudsync.h"

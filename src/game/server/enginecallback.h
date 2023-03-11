@@ -20,7 +20,7 @@
 #include "tier2/tier2_logging.h"
 #include "google/protobuf/message.h"
 
-class IFileSystem;				// include FileSystem.h
+class IFileSystem;				// include filesystem.h
 class IUniformRandomStream;		// include vstdlib/random.h
 class IEngineSound;				// include engine/IEngineSound.h
 class IVEngineServer;			

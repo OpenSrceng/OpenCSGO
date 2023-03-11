@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2004, Valve Corporation, All rights reserved. =======
 //
 // Purpose: This file loads a KeyValues file containing material name mappings.
 //			When the bsp is compiled, all materials listed in the file will
@@ -8,7 +8,7 @@
 
 #include "vbsp.h"
 #include "materialsub.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "tier1/strtools.h"
 
 bool g_ReplaceMaterials	= false;

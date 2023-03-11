@@ -9,7 +9,7 @@
 #include "RemoteServer.h"
 #include "VarEditDialog.h"
 
-#include <KeyValues.h>
+#include <keyvalues.h>
 #include <vgui/KeyCode.h>
 
 #include <vgui_controls/ListPanel.h>

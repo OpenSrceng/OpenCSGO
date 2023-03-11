@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -6,7 +6,7 @@
 
 
 #include "BaseSaveGameDialog.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "savegame_version.h"
 #include "vgui_controls/PanelListPanel.h"
 #include "vgui_controls/Label.h"
@@ -17,7 +17,7 @@
 #include "tier2/resourceprecacher.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "FileSystem.h"
+#include "filesystem.h"
 
 #include "MouseMessageForwardingPanel.h"
 

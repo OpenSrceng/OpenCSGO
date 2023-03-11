@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -29,7 +29,7 @@
 #include "bone_setup.h"
 #include "fmtstr.h"
 #include "vcollide_parse.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 
 int FindPhysprop( const char *pPropname );
 

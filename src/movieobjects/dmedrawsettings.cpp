@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+//======= Copyright ï¿½ 1996-2006, Valve Corporation, All rights reserved. ======
 //
 // Purpose:
 //
@@ -6,7 +6,7 @@
 
 
 #include "datamodel/dmelementfactoryhelper.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "tier1/utlrbtree.h"
 #include "movieobjects/dmedag.h"
 #include "movieobjects/dmedrawsettings.h"

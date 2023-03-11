@@ -1,11 +1,11 @@
-//====== Copyright © 1996-2006, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2006, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
 //=============================================================================
 
 #include "dme_controls/BaseAnimationSetEditor.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "vgui_controls/Splitter.h"
 #include "vgui_controls/Menu.h"
 #include "studio.h"

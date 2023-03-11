@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -35,7 +35,7 @@
 #include <malloc.h>
 #include <nvtristrip.h>
 #include "FileBuffer.h"
-#include "tier1/UtlVector.h"
+#include "tier1/utlvector.h"
 #include "materialsystem/IMaterial.h"
 #include "tier1/utllinkedlist.h"
 #include "tier1/smartptr.h"

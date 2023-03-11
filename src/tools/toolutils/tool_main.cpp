@@ -1,10 +1,10 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
 //=============================================================================
 
-#include "tier1/UtlVector.h"
+#include "tier1/utlvector.h"
 #include "tier1/convar.h"
 #include "icvar.h"
 #include "toolframework/itoolsystem.h"

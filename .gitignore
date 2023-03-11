@@ -42,9 +42,13 @@ obj*/
 # Specific Source build products
 /game/
 _vpc_/
-src/vscript/languages/squirrel/vsquirrel/init_nut.h
-generated_proto/
 
 # shader files
 *.tmp
 
+# waf
+__pycache__/
+.lock-waf*
+.waf*
+build/
+.ccache/

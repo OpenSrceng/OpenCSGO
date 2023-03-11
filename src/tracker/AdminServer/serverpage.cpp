@@ -36,7 +36,7 @@
 #include <VGUI_ComboBox.h>
 #include <VGUI_FocusNavGroup.h>
 #include <VGUI_Frame.h>
-#include <VGUI_KeyValues.h>
+#include <VGUI_keyvalues.h>
 #include <VGUI_ListPanel.h>
 #include <VGUI_MessageBox.h>
 #include <VGUI_Panel.h>

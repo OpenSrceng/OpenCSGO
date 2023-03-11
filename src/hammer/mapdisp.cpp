@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -27,7 +27,7 @@
 #include "ToolManager.h"
 #include "mathlib/mathlib.h"
 #include "dispshore.h"
-#include "Color.h"
+#include "color.h"
 #include "render2d.h"
 #include "faceeditsheet.h"
 #include "..\FoW\FoW.h"

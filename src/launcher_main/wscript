@@ -1,0 +1,42 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+from waflib import Utils
+import os
+
+top = '.'
+PROJECT_NAME = 'OpenCSGO'
+
+def options(opt):
+	# stub
+	return
+
+def configure(conf):
+	return
+
+def build(bld):
+	source = [
+		'main.cpp'
+	]
+
+	includes = [
+		'../public'
+	]
+
+	defines = []
+
+	libs = []
+
+	install_path = bld.env.BINDIR
+	bld(
+		source   = source,
+		target   = PROJECT_NAME,
+		name     = PROJECT_NAME,
+		features = 'c cxx cxxprogram',
+		includes = includes,
+		defines  = defines,
+		use      = libs,
+		install_path = install_path,
+		idx      = bld.get_taskgen_count()
+	)
+

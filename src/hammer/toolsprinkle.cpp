@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: Implements the entity/prefab placement tool.
 //
@@ -25,7 +25,7 @@
 #include "vgui/Cursor.h"
 #include "Selection.h"
 #include "vstdlib/random.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "entitysprinkledlg.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

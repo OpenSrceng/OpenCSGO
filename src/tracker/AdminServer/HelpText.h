@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include <VGUI_KeyValues.h>
+#include <VGUI_keyvalues.h>
 
 
 //-----------------------------------------------------------------------------

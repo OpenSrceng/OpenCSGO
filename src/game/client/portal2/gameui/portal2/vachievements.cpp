@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -6,7 +6,7 @@
 
 #include "EngineInterface.h"
 #include "VGenericPanelList.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "VFooterPanel.h"
 #include "fmtstr.h"
 
@@ -20,7 +20,7 @@
 #include "vgui_controls/Label.h"
 #include "vgui_controls/TextImage.h"
 
-#include "FileSystem.h"
+#include "filesystem.h"
 
 #include "VAchievements.h"
 

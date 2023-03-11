@@ -19,7 +19,7 @@
 #include <vgui/IInput.h>
 #include <vgui/ISystem.h>
 #include <vgui/ISurface.h>
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "tier1/convar.h"
 
 #include <vgui_controls/Button.h>

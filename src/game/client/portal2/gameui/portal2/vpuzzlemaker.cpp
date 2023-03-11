@@ -1,4 +1,4 @@
-//========= Copyright © Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ Valve Corporation, All rights reserved. ============//
 //
 // Purpose: This file provides Client.dll's wrapper around the PuzzleMaker LIB/DLL
 //
@@ -12,7 +12,7 @@
 
 #include "vgui_int.h"
 #include "vgui/ivgui.h"
-#include "vgui/isurface.h"
+#include "vgui/ISurface.h"
 #include "ienginevgui.h"
 #include "view_shared.h"
 #include "rendertexture.h"

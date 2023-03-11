@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -8,7 +8,7 @@
 #define __VKEYBINDINGS_H__
 
 #include "basemodui.h"
-#include "tier1/UtlVector.h"
+#include "tier1/utlvector.h"
 #include "tier1/UtlSymbol.h"
 
 class VControlsListPanel;

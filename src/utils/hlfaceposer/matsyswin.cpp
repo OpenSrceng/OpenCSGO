@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -21,8 +21,8 @@
 #include "ViewerSettings.h"
 #include "materialsystem/imaterialsystem.h"
 #include "materialsystem/imaterialproxyfactory.h"
-#include "FileSystem.h"
-#include <KeyValues.h>
+#include "filesystem.h"
+#include <keyvalues.h>
 #include "materialsystem/IMesh.h"
 #include "expressions.h"
 #include "hlfaceposer.h"

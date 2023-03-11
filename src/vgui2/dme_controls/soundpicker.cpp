@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -15,7 +15,7 @@
 #include "vgui_controls/PropertySheet.h"
 #include "vgui_controls/PropertyPage.h"
 #include "dme_controls/filtercombobox.h"
-#include "vgui/isurface.h"
+#include "vgui/ISurface.h"
 #include "vgui/iinput.h"
 #include "dme_controls/dmecontrols.h"
 #include "soundemittersystem/isoundemittersystembase.h"

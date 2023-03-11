@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: Implementation of IEditorTexture interface for materials.
 //
@@ -28,7 +28,7 @@
 #include "materialsystem/ITexture.h"
 #include "materialsystem/IMaterial.h"
 #include "bitmap/imageformat.h" // hack : don't want to include this just for ImageFormat
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "StudioModel.h"
 #include "tier1/strtools.h"
 #include "tier0/dbg.h"

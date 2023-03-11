@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -8,7 +8,7 @@
 #include "interface.h"
 #include "tier0/icommandline.h"
 #include "filesystem_tools.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "UtlBuffer.h"
 #include <io.h>
 #include <fcntl.h>

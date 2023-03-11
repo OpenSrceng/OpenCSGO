@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -20,7 +20,7 @@
 #include "vgui_controls/PropertyPage.h"
 #include "vgui/ischeme.h"
 #include "vgui/ivgui.h"
-#include "vgui/isurface.h"
+#include "vgui/ISurface.h"
 #include "tier1/tier1.h"
 #include "movieobjects/dmemakefile.h"
 #include "matsys_controls/picker.h"

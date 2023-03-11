@@ -366,11 +366,6 @@ void CServerMsg_CheckReservation::SendMsg( const ns_address &serverAdr, int sock
 	msg.WriteLongLong( 0 );
 #endif
 
-	#ifndef DEDICATED
-		if ( serverAdr.GetAddressType() == NSAT_PROXIED_GAMESERVER )
-			NET_InitSteamDatagramProxiedGameserverConnection( serverAdr );
-	#endif
-
 	NET_SendPacket( NULL, socket, serverAdr, msg.GetData(), msg.GetNumBytesWritten() );
 }
 
@@ -431,11 +426,6 @@ void CServerMsg_Ping::SendMsg( const ns_address &serverAdr, int socket, uint32 t
 	msg.WriteByte( A2S_PING );
 	msg.WriteLong( GetHostVersion() );
 	msg.WriteLong( token );
-
-	#ifndef DEDICATED
-		if ( serverAdr.GetAddressType() == NSAT_PROXIED_GAMESERVER )
-			NET_InitSteamDatagramProxiedGameserverConnection( serverAdr );
-	#endif
 
 	DevMsg( "Pinging %s\n", ns_address_render( serverAdr ).String() );
 	NET_SendPacket( NULL, socket, serverAdr, msg.GetData(), msg.GetNumBytesWritten() );
@@ -1493,16 +1483,7 @@ void CBaseClientState::CheckForResend ( bool bForceResendNow /* = false */ )
 					break;
 
 				case NSAT_PROXIED_GAMESERVER:
-					#ifdef DEDICATED
-						Assert( false );
-					#else
-
-						// Make sure we have a ticket, and are setup to talk to this guy
-						if ( !NET_InitSteamDatagramProxiedGameserverConnection( remote.m_adrRemote ) )
-							continue;
-
-						pszProtocol = "SteamDatagram";
-					#endif
+					Assert( false );
 					break;
 			}
 			if ( developer.GetInt() != 0 )
@@ -1707,20 +1688,6 @@ bool CBaseClientState::ProcessConnectionlessPacket( netpacket_t *packet )
 				Disconnect();
 				return false;
 			}
-
-			// The host can disable access to secure servers if you load unsigned code (mods, plugins, hacks)
-			if ( dc.m_bGSSecure && !Host_IsSecureServerAllowed() )
-			{
-				m_netadrReserveServer.RemoveAll();
-				m_nServerReservationCookie = 0;				
-				m_pServerReservationCallback = NULL;
-#if !defined(DEDICATED)
-				g_pMatchFramework->CloseSession();
-				g_pMatchFramework->GetEventsSubscription()->BroadcastEvent( new KeyValues( "OnClientInsecureBlocked", "reason", "connect" ) );
-#endif
-				Disconnect();
-				return false;
-			}	
 
 			char context[ 256 ] = { 0 };
 			msg.ReadString( context, sizeof( context ) );
@@ -2295,28 +2262,10 @@ void CBaseClientState::HandleDeferredConnection()
 			kvCreateSession->SetPtr( "ptr", &uiReservationCookie );
 			g_pMatchFramework->GetEventsSubscription()->BroadcastEvent( kvCreateSession );
 		}
-
-		if ( !uiReservationCookie )
-		{
-			Disconnect( true );	// disconnect the current attempt, will retry with GC reservation
-			{
-				KeyValues *kvCreateSession = new KeyValues( "OnEngineLevelLoadingSession" );
-				kvCreateSession->SetString( "reason", "CreateSession" );
-				kvCreateSession->SetString( "adr", ns_address_render( dc.m_adrServerAddress ).String() );
-				kvCreateSession->SetUint64( "gsid", dc.m_unGSSteamID );
-				// NO PTR HERE, FORCE COOKIE: kvCreateSession->SetPtr( "ptr", &uiReservationCookie );
-				g_pMatchFramework->GetEventsSubscription()->BroadcastEvent( kvCreateSession );
-			}
-		}
-		else
-			SendConnectPacket( dc.m_adrServerAddress, dc.m_nChallenge, dc.m_nAuthprotocol, dc.m_unGSSteamID, dc.m_bGSSecure );
 #endif
 	}
-	else
 #endif
-	{
-		SendConnectPacket ( dc.m_adrServerAddress, dc.m_nChallenge, dc.m_nAuthprotocol, dc.m_unGSSteamID, dc.m_bGSSecure );
-	}
+	SendConnectPacket ( dc.m_adrServerAddress, dc.m_nChallenge, dc.m_nAuthprotocol, dc.m_unGSSteamID, dc.m_bGSSecure );
 }
 
 

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: MapOverview.cpp: implementation of the CMapOverview class.
 //
@@ -7,7 +7,7 @@
 
 #include "cbase.h"
 #include "mapoverview.h"
-#include <vgui/isurface.h>
+#include <vgui/ISurface.h>
 #include <vgui/ILocalize.h>
 #include <filesystem.h>
 #include <keyvalues.h>

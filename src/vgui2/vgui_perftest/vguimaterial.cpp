@@ -14,7 +14,7 @@
 #include "tier1/strtools.h"
 #include "utlvector.h"
 #include "mathlib/vmatrix.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 
 #include "bitmap/tgaloader.h"
 #include "tier1/utlbuffer.h"

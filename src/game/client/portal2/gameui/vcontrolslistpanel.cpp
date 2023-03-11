@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -14,7 +14,7 @@
 #include <vgui/ISurface.h>
 #include <vgui/IVGui.h>
 #include <vgui/Cursor.h>
-#include <KeyValues.h>
+#include <keyvalues.h>
 #include "vgui_controls/Label.h"
 #include "vgui_controls/scrollbar.h"
 

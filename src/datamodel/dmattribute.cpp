@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2004, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -11,12 +11,12 @@
 #include "datamodel/idatamodel.h"
 #include "datamodel.h"
 #include "tier1/uniqueid.h"
-#include "Color.h"
+#include "color.h"
 #include "mathlib/vector.h"
 #include "tier1/utlstring.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utlbufferutil.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "tier1/mempool.h"
 #include "mathlib/vmatrix.h"
 #include "datamodel/dmattributevar.h"

@@ -20,7 +20,7 @@
 #include "gameui/portal2/vdialoglistbutton.h"
 #include "vpuzzlemakeruilistitem.h"
 
-#include "FileSystem.h"
+#include "filesystem.h"
 
 #if !defined( _X360 ) && !defined( _PS3 )
 #include "gc_clientsystem.h"

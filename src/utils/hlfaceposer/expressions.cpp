@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -12,7 +12,7 @@
 #include "expclass.h"
 #include "mxExpressionTab.h"
 #include "mxExpressionTray.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "faceposer_models.h"
 #include "UtlDict.h"
 #include "scriplib.h"

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -25,7 +25,7 @@
 #include "UtlDict.h"
 #include "bone_accessor.h"
 #include "optimize.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "Hammer.h"
 #include "HammerVGui.h"
 #include <VGuiMatSurface/IMatSystemSurface.h>

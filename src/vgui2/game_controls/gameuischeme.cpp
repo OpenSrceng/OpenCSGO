@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -16,9 +16,9 @@
 #include "vgui/ISystem.h"
 #include "tier1/utlbuffer.h"
 #include "gameuisystemmgr.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "vgui_surfacelib/fontmanager.h"
-#include "vgui/isurface.h"
+#include "vgui/ISurface.h"
 #include "vgui_controls/controls.h"  // has system() 
 
 #if defined( _X360 )

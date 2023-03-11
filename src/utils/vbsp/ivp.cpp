@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
@@ -15,7 +15,7 @@
 #include "vbsp.h"
 #include "phyfile.h"
 #include <float.h>
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "UtlBuffer.h"
 #include "UtlSymbol.h"
 #include "UtlRBTree.h"

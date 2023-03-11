@@ -33,7 +33,7 @@
 
 #include "demofile/demoformat.h"	 // demoheader_t
 
-#include "FileSystem.h"
+#include "filesystem.h"
 
 #include "gc_clientsystem.h"
 #include "econ_gcmessages.h"

@@ -1383,59 +1383,6 @@ static int NET_ReceiveRawPacket( int sock, void *buf, int len, ns_address *from 
 	if ( ret > 0 )
 		return ret;
 
-	// Still nothing?  Check proxied clients
-	if ( g_pSteamDatagramGameserver )
-	{
-		CSteamID remoteSteamID;
-		uint64 usecTimeRecv;
-		if ( sock == NS_SERVER )
-		{
-			ret = g_pSteamDatagramGameserver->RecvDatagram( buf, len, &remoteSteamID, &usecTimeRecv, STEAM_P2P_GAME_SERVER );
-			if ( ret > 0 )
-			{
-	            from->SetFromSteamID( remoteSteamID, STEAM_P2P_GAME_CLIENT );
-				from->m_AddrType = NSAT_PROXIED_CLIENT;
-				return ret;
-			}
-		}
-		else if ( sock == NS_HLTV )
-		{
-			ret = g_pSteamDatagramGameserver->RecvDatagram( buf, len, &remoteSteamID, &usecTimeRecv, STEAM_P2P_HLTV );
-			if ( ret > 0 )
-			{
-	            from->SetFromSteamID( remoteSteamID, STEAM_P2P_GAME_CLIENT );
-				from->m_AddrType = NSAT_PROXIED_CLIENT;
-				return ret;
-			}
-		}
-		else if ( sock == NS_HLTV1 )
-		{
-			ret = g_pSteamDatagramGameserver->RecvDatagram( buf, len, &remoteSteamID, &usecTimeRecv, STEAM_P2P_HLTV1 );
-			if ( ret > 0 )
-			{
-	            from->SetFromSteamID( remoteSteamID, STEAM_P2P_GAME_CLIENT );
-				from->m_AddrType = NSAT_PROXIED_CLIENT;
-				return ret;
-			}
-		}
-	}
-
-	// Still nothing?  Check proxied server
-	#ifndef DEDICATED
-		if ( sock == NS_CLIENT && ret <= 0 && g_pSteamDatagramClient && g_addrSteamDatagramProxiedGameServer.IsValid() )
-		{
-			//CSteamID remoteSteamID;
-			uint64 usecTimeRecv;
-			int ret = g_pSteamDatagramClient->RecvDatagram( buf, len, &usecTimeRecv, STEAM_P2P_GAME_CLIENT );
-			if ( ret > 0 )
-			{
-				*from = g_addrSteamDatagramProxiedGameServer;
-				//pReceiveData->usTime = usecTimeRecv;
-				return ret;
-			}
-		}
-	#endif
-
 	// nothing
 	return 0;
 }
@@ -2944,104 +2891,6 @@ private:
 static CBindAddressHelper g_BindAddressHelper;
 #endif
 
-#ifndef DEDICATED
-
-// Initialize steam client datagram lib if we haven't already
-static bool CheckInitSteamDatagramClientLib()
-{
-	static bool bInittedNetwork = false;
-	if ( bInittedNetwork )
-		return true;
-
-	if ( !Steam3Client().SteamHTTP() )
-	{
-		Warning( "Cannot init steam datagram client, no Steam HTTP interface\n" );
-		return false;
-	}
-
-	// Locate the first PLATFORM path
-	char szAbsPlatform[MAX_FILEPATH] = "";
-	const char *pszConfigDir = "config";
-	g_pFullFileSystem->GetSearchPath( "PLATFORM", false, szAbsPlatform, sizeof(szAbsPlatform) );
-
-	char *semi = strchr( szAbsPlatform, ';' );
-	if ( semi )
-		*semi = '\0';
-
-	// Set partner.  Running in china?
-	ESteamDatagramPartner ePartner = k_ESteamDatagramPartner_Steam;
-	if ( CommandLine()->HasParm( "-perfectworld" ) )
-		ePartner = k_ESteamDatagramPartner_China;
-	int iPartnerMark = -1; // CSGO doesn't prune the config based on partner!
-
-	char szAbsConfigDir[ MAX_FILEPATH];
-	V_ComposeFileName( szAbsPlatform, pszConfigDir, szAbsConfigDir, sizeof(szAbsConfigDir) );
-	SteamDatagramClient_Init( szAbsConfigDir, ePartner, iPartnerMark );
-	bInittedNetwork = true;
-
-	return true;
-}
-
-void NET_PrintSteamdatagramClientStatus()
-{
-	if ( !g_pSteamDatagramClient )
-	{
-		Msg( "No steam datagram client connection active\n" );
-		return;
-	}
-	ISteamDatagramTransportClient::ConnectionStatus status;
-	g_pSteamDatagramClient->GetConnectionStatus( status );
-	int sz = status.Print( NULL, 0 );
-	CUtlMemory<char> buf;
-	buf.EnsureCapacity( sz );
-	char *p = buf.Base();
-	status.Print( p, sz );
-	for (;;)
-	{
-		char *newline = strchr( p, '\n' );
-		if ( newline )
-			*newline = '\0';
-		Msg( "%s\n", p );
-		if ( !newline )
-			break;
-		p = newline+1;
-	}
-}
-CON_COMMAND( steamdatagram_client_status, "Print steam datagram client status" )
-{
-	NET_PrintSteamdatagramClientStatus();
-}
-
-bool NET_InitSteamDatagramProxiedGameserverConnection( const ns_address &adr )
-{
-	Assert( adr.GetAddressType() == NSAT_PROXIED_GAMESERVER );
-
-	// Most common case - talking to the same server as before
-	if ( g_pSteamDatagramClient )
-	{
-		if ( g_addrSteamDatagramProxiedGameServer.m_steamID.GetSteamID() == adr.m_steamID.GetSteamID() )
-		{
-			g_addrSteamDatagramProxiedGameServer.m_steamID.SetSteamChannel( adr.m_steamID.GetSteamChannel() );
-			return true;
-		}
-
-		// We have a client, but it was to talk to a different server.  Clear our ticket!
-		g_pSteamDatagramClient->Close();
-		g_addrSteamDatagramProxiedGameServer.Clear();
-	}
-
-	// Get a client to talk to this server
-	g_pSteamDatagramClient = SteamDatagramClient_Connect( adr.m_steamID.GetSteamID() );
-	if ( !g_pSteamDatagramClient )
-		return false;
-
-	// OK, remember who we're talking to
-	g_addrSteamDatagramProxiedGameServer = adr;
-	return true;
-}
-
-#endif
-
 static void OpenSocketInternal( int nModule, int nSetPort, int nDefaultPort, const char *pName, int nProtocol, bool bTryAny )
 {
 	CUtlVector< CUtlString > vecBindableAddresses;
@@ -3124,10 +2973,6 @@ static void OpenSocketInternal( int nModule, int nSetPort, int nDefaultPort, con
 	{
 		g_pSteamSocketMgr->OpenSocket( *handle, nModule, nSetPort, nDefaultPort, pName, nProtocol, bTryAny );
 	}
-	#ifndef DEDICATED
-		if ( nModule == NS_CLIENT )
-			CheckInitSteamDatagramClientLib();
-	#endif
 }
 
 /*
@@ -4162,13 +4007,6 @@ void NET_Init( bool bIsDedicated )
 	NET_SetMultiplayer( !!( g_pMatchFramework->GetMatchTitle()->GetTitleSettingsFlags() & MATCHTITLE_SETTING_MULTIPLAYER ) );
 
 	// Go ahead and create steam datagram client, and start measuring pings to data centers
-	#ifndef DEDICATED
-	if ( CheckInitSteamDatagramClientLib() )
-	{
-		if ( ::SteamNetworkingUtils() )
-			::SteamNetworkingUtils()->CheckPingDataUpToDate( 0.0f );
-	}
-	#endif
 }
 
 /*
@@ -4193,9 +4031,6 @@ void NET_Shutdown (void)
 
 	NET_CloseAllSockets();
 	NET_ConfigLoopbackBuffers( false );
-#ifndef DEDICATED
-	SteamDatagramClient_Kill();
-#endif
 
 #if defined(_WIN32)
 	if ( !net_noip )
@@ -4449,28 +4284,6 @@ bool NET_GetPublicAdr( netadr_t &adr )
 
 void NET_SteamDatagramServerListen()
 {
-	// Receiving on steam datagram transport?
-	// We only open one interface object (corresponding to one UDP port).
-	// The other "sockets" are different channels on this interface
-	if ( sv_steamdatagramtransport_port.GetInt() == 0 )
-		return;
-	if ( g_pSteamDatagramGameserver )
-		return;
-
-	SteamDatagramErrMsg errMsg;
-	EResult result;
-	g_pSteamDatagramGameserver = SteamDatagram_GameserverListen( GetSteamUniverse(), sv_steamdatagramtransport_port.GetInt(), &result, errMsg );
-	if ( g_pSteamDatagramGameserver )
-	{
-		Msg( "Listening for Steam datagram transport on port %d\n", sv_steamdatagramtransport_port.GetInt() );
-	}
-	else
-	{
-		Warning( "SteamDatagram_GameserverListen failed with error code %d.  %s\n", result, errMsg );
-
-		// Clear the convar so we don't advertise that we are listening!
-		sv_steamdatagramtransport_port.SetValue( 0 );
-	}
 }
 
 void NET_TerminateConnection( int sock, const ns_address &peer )
@@ -4482,10 +4295,6 @@ void NET_TerminateConnection( int sock, const ns_address &peer )
 		NET_TerminateSteamConnection( steamIDRemote );
 	}
 #endif
-#ifndef DEDICATED
-	if ( peer == g_addrSteamDatagramProxiedGameServer )
-		CloseSteamDatagramClientConnection();
-#endif		
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -4498,8 +4307,13 @@ void NET_TerminateConnection( int sock, const ns_address &peer )
 #undef Verify
 #endif
 
+#if defined(__X86_64__) || defined(__i386__)
 #define bswap_16 __bswap_16
+#define bswap_32 __bswap_32
 #define bswap_64 __bswap_64
+#else
+#error
+#endif
 
 #include "cryptlib.h"
 #include "rsa.h"
@@ -4564,7 +4378,171 @@ bool NET_CryptVerifyServerCertificateAndAllocateSessionKey( bool bOfficial, cons
 	const byte *pchKeySgn, int numKeySgn,
 	byte **pbAllocatedKey, int *pnAllocatedCryptoBlockSize )
 {
-	static const byte CsgoMasterPublicKey[] = { 0 }; // Removed for partner depot
+    // lwss - grabbed this public key from the retail bin. "keysize" is 160 bytes, but the key is only 158 bytes
+    // (Untested as of now)
+    //static const byte CsgoMasterPublicKey[] = { 0 }; // Removed for partner depot
+    static const byte CsgoMasterPublicKey[160] = {
+            0x81,
+            0x9D,
+            0x30,
+            0x0D,
+            0x6,
+            0x9,
+            0x2A,
+            0x86,
+            0x48,
+            0x86,
+            0xF7,
+            0x0D,
+            0x1,
+            0x1,
+            0x1,
+            0x5,
+            0x0,
+            0x3,
+            0x81,
+            0x8B,
+            0x0,
+            0x30,
+            0x81,
+            0x87,
+            0x2,
+            0x81,
+            0x81,
+            0x0,
+            0x0C6,
+            0x0D1,
+            0x2,
+            0x24,
+            0x52,
+            0x78,
+            0x0A9,
+            0x93,
+            0x10,
+            0x78,
+            0x0DF,
+            0x8E,
+            0x0D0,
+            0x0A5,
+            0x94,
+            0x0B4,
+            0x69,
+            0x0E6,
+            0x0E0,
+            0x0FC,
+            0x67,
+            0x34,
+            0x6E,
+            0x8A,
+            0x52,
+            0x9A,
+            0x0A8,
+            0x8A,
+            0x0FE,
+            0x9F,
+            0x0F8,
+            0x0BF,
+            0x53,
+            0x0BD,
+            0x54,
+            0x0AA,
+            0x50,
+            0x5F,
+            0x0C0,
+            0x9E,
+            0x18,
+            0x0C6,
+            0x28,
+            0x63,
+            0x3C,
+            0x0D,
+            0x0CC,
+            0x2B,
+            0x0AE,
+            0x51,
+            0x0A0,
+            0x10,
+            0x0F,
+            0x0D,
+            0x68,
+            0x0F4,
+            0x9F,
+            0x11,
+            0x0FE,
+            0x0C3,
+            0x0E6,
+            0x0E4,
+            0x2F,
+            0x0DB,
+            0x0C9,
+            0x33,
+            0x74,
+            0x0EC,
+            0x4C,
+            0x0DB,
+            0x0C5,
+            0x0CE,
+            0x5,
+            0x9B,
+            0x21,
+            0x8C,
+            0x15,
+            0x68,
+            0x0C,
+            0x0CB,
+            0x52,
+            0x0A,
+            0x0DB,
+            0x46,
+            0x9A,
+            0x6B,
+            0x0D6,
+            0x0AF,
+            0x45,
+            0x0DC,
+            0x56,
+            0x0D0,
+            0x2D,
+            0x23,
+            0x2C,
+            0x3A,
+            0x16,
+            0x16,
+            0x0EC,
+            0x0AD,
+            0x22,
+            0x7E,
+            0x56,
+            0x10,
+            0x50,
+            0x0CC,
+            0x0D,
+            0x0A0,
+            0x0D9,
+            0x5F,
+            0x0A6,
+            0x0CD,
+            0x0E2,
+            0x0,
+            0x4B,
+            0x0D4,
+            0x0BE,
+            0x67,
+            0x0C,
+            0x0AE,
+            0x0D9,
+            0x0D1,
+            0x5,
+            0x5E,
+            0x95,
+            0x0BB,
+            0x7A,
+            0x93,
+            0x2,
+            0x1,
+            0x11
+    };
+    // lwss - end
 
 	// For now, only IPv4 addresses allowed.  Shouldn't be too hard to figure out how to
 	// generate blocks to sign for other types of addresses
@@ -4575,16 +4553,7 @@ bool NET_CryptVerifyServerCertificateAndAllocateSessionKey( bool bOfficial, cons
 			unCertIP = from.AsType<netadr_t>().GetIPHostByteOrder();
 			break;
 		case NSAT_PROXIED_GAMESERVER:
-		{
-			unCertIP = SteamNetworkingUtils()->GetIPForServerSteamIDFromTicket( from.m_steamID.GetSteamID() );
-			if ( unCertIP == 0 )
-			{
-				Warning( "NET_CryptVerifyServerCertificateAndAllocateSessionKey - cannot check signature for proxied server '%s', because we don't have an SDR ticket to that server.\n", ns_address_render( from ).String() );
-				Assert(false);
-				return false;
-			}
 			break;
-		}
 	}
 	if ( unCertIP == 0 )
 	{

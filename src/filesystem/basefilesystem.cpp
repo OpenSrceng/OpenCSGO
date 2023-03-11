@@ -14,7 +14,7 @@
 #include "tier1/characterset.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/convar.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "tier0/icommandline.h"
 #include "generichash.h"
 #include "tier1/utllinkedlist.h"
@@ -1819,7 +1819,7 @@ bool CBaseFileSystem::ReadToBuffer( FileHandle_t fp, CUtlBuffer &buf, int nMaxBy
 	if ( nMaxBytes > 0 )
 	{
 		// can't read more than file has
-		nBytesToRead = min( nMaxBytes, nBytesToRead );
+		nBytesToRead = MIN( nMaxBytes, nBytesToRead );
 	}
 
 	int nBytesRead = 0;
@@ -1949,7 +1949,7 @@ int CBaseFileSystem::ReadFileEx( const char *pFileName, const char *pPath, void 
 	int nBytesRead = 0;
 	if ( nMaxBytes > 0 )
 	{
-		nBytesToRead = min( nMaxBytes, nBytesToRead );
+		nBytesToRead = MIN( nMaxBytes, nBytesToRead );
 		if ( bNullTerminate )
 		{
 			nBytesToRead--;
@@ -5043,7 +5043,7 @@ CSysModule *CBaseFileSystem::LoadModule( const char *pFileName, const char *pPat
 		if ( FilterByPathID( &m_SearchPaths[i], lookup ) )
 			continue;
 
-		Q_snprintf( tempPathID, sizeof(tempPathID), "%s%s", m_SearchPaths[i].GetPathString(), pFileName ); // append the path to this dir.
+		Q_snprintf( tempPathID, sizeof(tempPathID), "%slib%s", m_SearchPaths[i].GetPathString(), pFileName ); // append the path to this dir.
 		CSysModule *pModule = Sys_LoadModule( tempPathID );
 		if ( pModule ) 
 		{
@@ -5652,7 +5652,7 @@ bool CFileHandle::EndOfFile()
 
 int CMemoryFileHandle::Read( void* pBuffer, int nDestSize, int nLength )
 {
-	nLength = min( nLength, (int) m_nLength - m_nPosition );
+	nLength = MIN( nLength, (int) m_nLength - m_nPosition );
 	if ( nLength > 0 )
 	{
 		Assert( m_nPosition >= 0 );

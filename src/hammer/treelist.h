@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2009, Valve Corporation, All rights reserved. ====
+//========= Copyright ï¿½ 1996-2009, Valve Corporation, All rights reserved. ====
 //
 //=============================================================================
 
@@ -8,7 +8,7 @@
 #pragma once
 #endif
 
-#include "UtlVector.h"
+#include "utlvector.h"
 
 
 #define TREELIST_MSG_TOGGLE_STATE		"TreeList_ToggleState"

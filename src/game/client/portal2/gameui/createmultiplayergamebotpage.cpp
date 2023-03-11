@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -10,13 +10,13 @@
 
 using namespace vgui;
 
-#include <KeyValues.h>
+#include <keyvalues.h>
 #include <vgui_controls/ComboBox.h>
 #include <vgui_controls/CheckButton.h>
 #include <vgui_controls/Label.h>
 #include <vgui_controls/TextEntry.h>
 
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "PanelListPanel.h"
 #include "ScriptObject.h"
 #include "tier1/convar.h"

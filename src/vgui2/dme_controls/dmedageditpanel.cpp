@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
+//========= Copyright ï¿½ 1996-2001, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -20,7 +20,7 @@
 #include "vgui_controls/ListPanel.h"
 #include "vgui_controls/Image.h"
 #include "vgui_controls/TextImage.h"
-#include "vgui/isurface.h"
+#include "vgui/ISurface.h"
 #include "vgui/ischeme.h"
 #include "vgui/iinput.h"
 #include "vgui/ivgui.h"

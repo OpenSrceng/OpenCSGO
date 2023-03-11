@@ -9,7 +9,7 @@
 #include "RemoteServer.h"
 
 #include <vgui/IVGui.h>
-#include <KeyValues.h>
+#include <keyvalues.h>
 
 #include <vgui_controls/TextEntry.h>
 #include <vgui_controls/RichText.h>

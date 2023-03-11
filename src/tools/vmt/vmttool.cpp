@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. =======
 //
 // Purpose: Act busy tool; main UI smarts class
 //
@@ -11,7 +11,7 @@
 #include "toolutils/tooleditmenubutton.h"
 #include "toolutils/toolmenubutton.h"
 #include "vgui_controls/Menu.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "toolutils/enginetools_int.h"
 #include "toolframework/ienginetool.h"
 #include "vgui/IInput.h"

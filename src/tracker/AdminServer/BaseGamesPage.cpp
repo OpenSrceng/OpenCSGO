@@ -19,7 +19,7 @@
 #include <VGUI_ListPanel.h>
 #include <VGUI_MenuButton.h>
 #include <VGUI_Menu.h>
-#include <VGUI_KeyValues.h>
+#include <VGUI_keyvalues.h>
 #include <VGUI_MouseCode.h>
 
 #include <stdio.h>

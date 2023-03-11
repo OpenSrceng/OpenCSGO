@@ -9,7 +9,7 @@
 #include "portal_mp_gamerules.h"
 #include "viewport_panel_names.h"
 #include "gameeventdefs.h"
-#include <KeyValues.h>
+#include <keyvalues.h>
 #include "ammodef.h"
 #include "tier1/fmtstr.h"
 #include "hl2_shareddefs.h"

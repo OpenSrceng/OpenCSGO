@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2009, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2009, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -8,8 +8,8 @@
 #define MANIFEST_H
 #pragma once
 
-#include "KeyValues.h"
-#include "UtlVector.h"
+#include "keyvalues.h"
+#include "utlvector.h"
 #include "MapDoc.h"
 
 class BoundBox;

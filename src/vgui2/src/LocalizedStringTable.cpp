@@ -15,14 +15,14 @@
 #endif
 #include <wchar.h>
 
-#include "FileSystem.h"
+#include "filesystem.h"
 
 #include "vgui_internal.h"
 #include "vgui/ILocalize.h"
 #include "vgui/ISystem.h"
 #include "vgui/ISurface.h"
 
-#include "tier1/UtlVector.h"
+#include "tier1/utlvector.h"
 #include "tier1/UtlRBTree.h"
 #include "tier1/UtlSymbol.h"
 #include "tier1/UtlString.h"

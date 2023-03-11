@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2009, Valve Corporation, All rights reserved. ========
+//===== Copyright ï¿½ 1996-2009, Valve Corporation, All rights reserved. ========
 //
 // Purpose: Implementation of the CScriptEditorPanel class and associated helper
 // classes. The ScriptEditorPanel class represents a vgui panel which contains
@@ -11,7 +11,7 @@
 #include "vgui/iinput.h"
 #include "vgui/ischeme.h"
 #include "vgui/ivgui.h"
-#include "vgui/isurface.h"
+#include "vgui/ISurface.h"
 #include "vgui_controls/button.h"
 #include "vgui_controls/textentry.h"
 #include "vgui_controls/richtext.h"

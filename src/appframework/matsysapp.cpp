@@ -9,7 +9,7 @@
 #ifdef _WIN32
 
 #include "appframework/matsysapp.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "materialsystem/IMaterialSystem.h"
 #include "tier0/dbg.h"
 #include "tier0/icommandline.h"

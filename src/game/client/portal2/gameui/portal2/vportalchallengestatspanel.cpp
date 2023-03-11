@@ -7,7 +7,7 @@
 
 #include "vportalchallengestatspanel.h"
 #include <vgui_controls/Label.h>
-#include <vgui/isurface.h>
+#include <vgui/ISurface.h>
 
 
 // memdbgon must be the last include file in a .cpp file!!!

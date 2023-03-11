@@ -21,7 +21,7 @@
 #include "keyvalues.h"
 #include <filesystem.h>
 #include "c_team.h"
-#include "vgui/isurface.h"
+#include "vgui/ISurface.h"
 #include "iclientmode.h"
 #include "c_portal_player.h"
 #include "hud_locator_target.h"

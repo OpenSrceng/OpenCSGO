@@ -11,7 +11,7 @@
 #include "Server.h"
 
 #include <VGUI_MessageBox.h>
-#include <VGUI_KeyValues.h>
+#include <VGUI_keyvalues.h>
 
 using namespace vgui;
 

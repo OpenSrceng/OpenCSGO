@@ -1,11 +1,11 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
 //=============================================================================
 
 #include "toolutils/basepropertiescontainer.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 
 CBasePropertiesContainer::CBasePropertiesContainer( vgui::Panel *parent, IDmNotify *pNotify, CDmeEditorTypeDictionary *pDict /*=NULL*/ )
 	: BaseClass( parent, pNotify, NULL, true, pDict )

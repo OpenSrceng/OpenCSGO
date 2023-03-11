@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -8,7 +8,7 @@
 #include "toolutils/ConsolePage.h"
 #include "vgui_controls/Label.h"
 #include "movieobjects/dmeclip.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "vgui/IVGui.h"
 #include "toolutils/enginetools_int.h"
 #include "toolframework/ienginetool.h"

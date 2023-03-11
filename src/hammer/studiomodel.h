@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -17,7 +17,7 @@ typedef unsigned char byte;
 
 #include "hammer_mathlib.h"
 #include "studio.h"
-#include "UtlVector.h"
+#include "utlvector.h"
 #include "datacache/imdlcache.h"
 #include "FileChangeWatcher.h"
 

@@ -8,7 +8,7 @@
 #include "DialogServerPassword.h"
 
 #include <VGUI_Button.h>
-#include <VGUI_KeyValues.h>
+#include <VGUI_keyvalues.h>
 #include <VGUI_Label.h>
 #include <VGUI_TextEntry.h>
 

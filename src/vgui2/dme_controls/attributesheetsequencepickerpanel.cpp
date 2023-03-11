@@ -5,7 +5,7 @@
 //===============================================================================
 
 #include "dme_controls/attributesheetsequencepickerpanel.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "vgui_controls/MenuButton.h"
 #include "vgui_controls/FileOpenDialog.h"
 #include "dme_controls/AttributeTextEntry.h"

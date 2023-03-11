@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ====
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ====
 //
 // Purpose: 
 //
@@ -12,7 +12,7 @@
 #include "GlobalFunctions.h"
 #include "fgdlib/HelperInfo.h"
 #include "hammer.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "MapDoc.h"
 #include "MapDoc.h"
 #include "MapEntity.h"

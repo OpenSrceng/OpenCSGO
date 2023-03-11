@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include "EngineInterface.h"
 #include <vgui_controls/Label.h>
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "tier1/convar.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

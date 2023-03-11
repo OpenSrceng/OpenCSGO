@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 
-#include <KeyValues.h>
+#include <keyvalues.h>
 #include <vgui_controls/ListPanel.h>	
 
 

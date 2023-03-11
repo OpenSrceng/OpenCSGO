@@ -8,7 +8,7 @@
 #include "CDKeyEntryDialog.h"
 #include "EngineInterface.h"
 
-#include "steamcommon.h" // VALVE_AUTH cd key checking code
+#include "SteamCommon.h" // VALVE_AUTH cd key checking code
 #include "ValidateNewValveCDKeyClient.h"
 #include "ValveCDKeyGameAndTerritoryCodes.h"
 

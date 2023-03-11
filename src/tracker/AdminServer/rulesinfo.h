@@ -20,7 +20,7 @@ class IResponse;
 #include <VGUI_PropertyPage.h>
 #include <VGUI_Frame.h>
 #include <VGUI_ListPanel.h>
-#include <VGUI_KeyValues.h>
+#include <VGUI_keyvalues.h>
 
 
 class CRulesInfo 

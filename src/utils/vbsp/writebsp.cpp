@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -8,7 +8,7 @@
 
 #include "vbsp.h"
 #include "disp_vbsp.h"
-#include "UtlVector.h"
+#include "utlvector.h"
 #include "faces.h"
 #include "builddisp.h"
 #include "tier1/strtools.h"

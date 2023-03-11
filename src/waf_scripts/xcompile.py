@@ -1,0 +1,307 @@
+# encoding: utf-8
+# xcompile.py -- crosscompiling utils
+# Copyright (C) 2018 a1batross
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+try: from fwgslib import get_flags_by_compiler
+except: from waflib.extras.fwgslib import get_flags_by_compiler
+from waflib import Logs, TaskGen
+from waflib.Tools import c_config
+from collections import OrderedDict
+import os
+import sys
+
+ANDROID_NDK_ENVVARS = ['ANDROID_NDK_HOME', 'ANDROID_NDK']
+
+# This class does support ONLY r10e and r19c/r20 NDK
+class Android:
+	ctx            = None # waf context
+	arch           = None
+	toolchain      = None
+	api            = None
+	ndk_home       = None
+	ndk_rev        = 0
+	is_hardfloat   = False
+	clang          = False
+
+	def __init__(self, ctx, arch):
+		self.ctx = ctx
+		self.arch = arch
+
+		for i in ANDROID_NDK_ENVVARS:
+			self.ndk_home = os.getenv(i)
+			if self.ndk_home != None:
+				break
+		else:
+			ctx.fatal('Set %s environment variable pointing to the root of Android NDK!' %
+				' or '.join(ANDROID_NDK_ENVVARS))
+
+		if self.arch == 'armeabi-v7a-hard':
+			self.arch = 'armeabi-v7a' # Only armeabi-v7a have hard float ABI
+			self.is_hardfloat = True
+
+	def is_host(self):
+		'''
+		Checks if we using host compiler(implies clang)
+		'''
+		return self.toolchain == 'host'
+
+	def is_arm(self):
+		'''
+		Checks if selected architecture is **32-bit** ARM
+		'''
+		return self.arch.startswith('armeabi')
+
+	def is_x86(self):
+		'''
+		Checks if selected architecture is **32-bit** or **64-bit** x86
+		'''
+		return self.arch == 'x86'
+
+	def is_amd64(self):
+		'''
+		Checks if selected architecture is **64-bit** x86
+		'''
+		return self.arch == 'x86_64'
+
+	def is_arm64(self):
+		'''
+		Checks if selected architecture is AArch64
+		'''
+		return self.arch == 'aarch64'
+
+	def is_hardfp(self):
+		return self.is_hardfloat
+
+	def ndk_triplet(self, toolchain_folder = False):
+		if self.is_x86():
+			if toolchain_folder:
+				return 'x86'
+			else:
+				return 'i686-linux-android'
+		elif self.is_arm():
+			return 'arm-linux-androideabi'
+		elif self.is_amd64() and toolchain_folder:
+			return 'x86_64'
+		else:
+			return self.arch + '-linux-android'
+
+	def apk_arch(self):
+		if self.is_arm64():
+			return 'arm64-v8a'
+		return self.arch
+
+	def gen_host_toolchain(self):
+		# With host toolchain we don't care about OS
+		# so just download NDK for Linux x86_64
+		if self.is_host():
+			return 'linux-x86_64'
+
+		if sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
+			osname = 'windows'
+		elif sys.platform.startswith('darwin'):
+			osname = 'darwin'
+		elif sys.platform.startswith('linux'):
+			osname = 'linux'
+		else:
+			self.ctx.fatal('Unsupported by NDK host platform')
+
+		if sys.maxsize > 2**32:
+			arch = 'x86_64'
+		else: arch = 'x86'
+
+		return '%s-%s' % (osname, arch)
+
+	def gen_gcc_toolchain_path(self):
+		path = 'toolchains'
+		toolchain_host = self.gen_host_toolchain()
+
+		toolchain = '7'
+
+		toolchain_folder = '%s-%s' % (self.ndk_triplet(toolchain_folder = True), toolchain)
+
+		return os.path.abspath(os.path.join(self.ndk_home, path, toolchain_folder, 'prebuilt', toolchain_host))
+
+	def gen_toolchain_path(self):
+		triplet = self.ndk_triplet() + '-'
+		return os.path.join(self.gen_gcc_toolchain_path(), 'bin', triplet)
+
+	def gen_binutils_path(self):
+		return os.path.join(self.gen_gcc_toolchain_path(), self.ndk_triplet(), 'bin')
+
+	def cc(self):
+		if self.is_host():
+			return 'clang --target=%s%d' % (self.ndk_triplet(), self.api)
+		return self.gen_toolchain_path() + ('gcc')
+
+	def cxx(self):
+		if self.is_host():
+			return 'clang++ --target=%s%d' % (self.ndk_triplet(), self.api)
+		return self.gen_toolchain_path() + ('g++')
+
+	def strip(self):
+		return os.path.join(self.gen_binutils_path(), 'strip')
+
+	def system_stl(self):
+		return [
+			os.path.abspath(os.path.join(self.ndk_home, 'sources', 'cxx-stl', 'gnu-libstdc++', 'include')),
+			os.path.abspath(os.path.join(self.ndk_home, 'sources', 'crystax', 'include'))
+		]
+
+	def libsysroot(self):
+		arch = self.arch
+		if self.is_arm():
+			arch = 'arm'
+		elif self.is_arm64():
+			arch = 'arm64'
+		path = 'sysroot/arch-%s' % (arch)
+
+		return os.path.abspath(os.path.join(self.ndk_home, path))
+
+	def sysroot(self):
+		return self.libsysroot()
+
+	def cflags(self, cxx = False):
+		cflags = ['--sysroot=%s' % (self.sysroot())]
+		cflags += ['-I%s'%i for i in self.system_stl()]+['-DANDROID', '-D__ANDROID__']
+
+		if self.is_arm():
+			if self.arch == 'armeabi-v7a':
+				# ARMv7 support
+				cflags += ['-mfpu=neon-vfpv4', '-mcpu=cortex-a7', '-mtune=cortex-a7', '-DHAVE_EFFICIENT_UNALIGNED_ACCESS', '-DVECTORIZE_SINCOS']
+				cflags += [ '-mvectorize-with-neon-quad' ]
+
+				if self.is_hardfp():
+					cflags += ['-D_NDK_MATH_NO_SOFTFP=1', '-mfloat-abi=hard', '-DLOAD_HARDFP', '-DSOFTFP_LINK']
+				else:
+					cflags += ['-mfloat-abi=softfp']
+			else:
+				# ARMv5 support
+				cflags += ['-march=armv5te', '-mtune=xscale', '-msoft-float']
+		elif self.is_x86():
+			cflags += ['-mtune=atom', '-march=atom', '-mssse3', '-mfpmath=sse', '-DVECTORIZE_SINCOS', '-DHAVE_EFFICIENT_UNALIGNED_ACCESS']
+		return cflags
+
+	# they go before object list
+	def linkflags(self):
+		linkflags = ['--sysroot=%s' % (self.sysroot())]
+		linkflags += ['-Wl,--hash-style=both','-Wl,--no-undefined']
+		return linkflags
+
+	def ldflags(self):
+		ldflags = ['-no-canonical-prefixes']
+		if self.is_arm():
+			if self.arch == 'armeabi-v7a':
+				ldflags += ['-march=armv7-a']
+				ldflags += ['-Wl,--fix-cortex-a8']
+
+				if self.is_hardfp():
+					ldflags += ['-Wl,--no-warn-mismatch', '-lm_hard']
+			else:
+				ldflags += ['-march=armv5te']
+		return ldflags
+
+def options(opt):
+	android = opt.add_option_group('Android options')
+	android.add_option('--android', action='store', dest='ANDROID_OPT', default=None,
+		help='enable building for android, format: --android=<arch> example: --android=aarch64')
+
+def configure(conf):
+	if conf.options.ANDROID_OPT:
+		value = conf.options.ANDROID_OPT
+
+		valid_archs = ['x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'armeabi-v7a-hard', 'aarch64']
+
+		if value not in valid_archs:
+			conf.fatal('Unknown arch: %s. Supported: %r' % (value, ', '.join(valid_archs)))
+
+		stlarch = value
+		if value == 'aarch64': stlarch = 'arm64-v8a'
+
+		conf.android = android = Android(conf, value)
+		conf.environ['CC'] = android.cc()
+		conf.environ['CXX'] = android.cxx()
+		conf.environ['STRIP'] = android.strip()
+		conf.env.CFLAGS += android.cflags()
+		conf.env.CXXFLAGS += android.cflags(True)
+		conf.env.LINKFLAGS += android.linkflags()
+		conf.env.LDFLAGS += android.ldflags()
+		conf.env.STLIBPATH += [os.path.abspath(os.path.join(android.ndk_home, 'sources','crystax','libs',stlarch))]
+		conf.env.STLIBPATH += [os.path.abspath(os.path.join(android.ndk_home, 'sources','cxx-stl','gnu-libstdc++','libs',stlarch))]
+		conf.env.CXXFLAGS += ('-I', os.path.join(android.ndk_home, 'sources','cxx-stl','gnu-libstdc++','libs',stlarch,'include'))
+		conf.env.LDFLAGS += ['-lgnustl_static']
+
+		conf.env.HAVE_M = True
+		if android.is_hardfp():
+			conf.env.LIB_M = ['m_hard']
+		else: conf.env.LIB_M = ['m']
+
+		conf.env.PREFIX += '/lib/%s' % android.apk_arch()
+
+		conf.msg('Selected Android NDK', '%s, version: %d' % (android.ndk_home, android.ndk_rev))
+		# no need to print C/C++ compiler, as it would be printed by compiler_c/cxx
+		conf.msg('... C/C++ flags', ' '.join(android.cflags()).replace(android.ndk_home, '$NDK/'))
+		conf.msg('... link flags', ' '.join(android.linkflags()).replace(android.ndk_home, '$NDK/'))
+		conf.msg('... ld flags', ' '.join(android.ldflags()).replace(android.ndk_home, '$NDK/'))
+
+		# conf.env.ANDROID_OPTS = android
+		conf.env.DEST_OS2 = 'android'
+
+	MACRO_TO_DESTOS = OrderedDict({ '__ANDROID__' : 'android' })
+	for k in c_config.MACRO_TO_DESTOS:
+		MACRO_TO_DESTOS[k] = c_config.MACRO_TO_DESTOS[k] # ordering is important
+	c_config.MACRO_TO_DESTOS  = MACRO_TO_DESTOS
+
+def post_compiler_cxx_configure(conf):
+	conf.msg('Target OS', conf.env.DEST_OS)
+	conf.msg('Target CPU', conf.env.DEST_CPU)
+	conf.msg('Target binfmt', conf.env.DEST_BINFMT)
+	return
+
+def post_compiler_c_configure(conf):
+	conf.msg('Target OS', conf.env.DEST_OS)
+	conf.msg('Target CPU', conf.env.DEST_CPU)
+	conf.msg('Target binfmt', conf.env.DEST_BINFMT)
+
+	return
+
+from waflib.Tools import compiler_cxx, compiler_c
+
+compiler_cxx_configure = getattr(compiler_cxx, 'configure')
+compiler_c_configure = getattr(compiler_c, 'configure')
+
+def patch_compiler_cxx_configure(conf):
+	compiler_cxx_configure(conf)
+	post_compiler_cxx_configure(conf)
+
+def patch_compiler_c_configure(conf):
+	compiler_c_configure(conf)
+	post_compiler_c_configure(conf)
+
+setattr(compiler_cxx, 'configure', patch_compiler_cxx_configure)
+setattr(compiler_c, 'configure', patch_compiler_c_configure)
+
+@TaskGen.feature('cshlib', 'cxxshlib', 'dshlib', 'fcshlib', 'vnum')
+@TaskGen.after_method('apply_link', 'propagate_uselib_vars')
+@TaskGen.before_method('apply_vnum')
+def apply_android_soname(self):
+	"""
+	Enforce SONAME on Android
+	"""
+	if self.env.DEST_OS != 'android':
+		return
+
+	setattr(self, 'vnum', None) # remove vnum, so SONAME would not be overwritten
+	link = self.link_task
+	node = link.outputs[0]
+	libname = node.name
+	v = self.env.SONAME_ST % libname
+	self.env.append_value('LINKFLAGS', v.split())

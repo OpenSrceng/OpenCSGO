@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -11,7 +11,7 @@
 #endif
 
 #include "sceneimage.h"
-#include "tier1/UtlVector.h"
+#include "tier1/utlvector.h"
 #include "tier1/UtlString.h"
 
 #define IDC_FILE_LOADMODEL			1001

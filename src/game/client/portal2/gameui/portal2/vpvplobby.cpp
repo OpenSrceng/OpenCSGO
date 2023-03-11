@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
 //=====================================================================================//
 
 #include "vpvplobby.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "VGenericConfirmation.h"
 #include "VGenericPanelList.h"
 #include "VFooterPanel.h"
@@ -22,7 +22,7 @@
 #include "vgui/ILocalize.h"
 #include "vgui/ISurface.h"
 #include "vgui/IVGui.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 
 #include "fmtstr.h"
 #include "smartptr.h"

@@ -56,7 +56,7 @@
 #include "BasePanel.h"
 
 #include <vgui/Cursor.h>
-#include <KeyValues.h>
+#include <keyvalues.h>
 #include <vgui/ILocalize.h>
 #include <vgui/IPanel.h>
 #include <vgui/IScheme.h>

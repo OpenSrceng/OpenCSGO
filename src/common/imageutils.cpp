@@ -55,6 +55,9 @@ extern void longjmp( jmp_buf, int ) __attribute__((noreturn));
 #elif defined(CLIENT_DLL) || defined(GAME_DLL)
 	#include "cdll_int.h"
 	extern IVEngineClient *engine;
+#elif GAMEUI_EXPORTS
+	#include "cdll_int.h"
+	extern IVEngineClient *engine;
 #endif
 
 // use the JPEGLIB_USE_STDIO define so that we can read in jpeg's from outside the game directory tree.
@@ -63,8 +66,8 @@ extern void longjmp( jmp_buf, int ) __attribute__((noreturn));
 #undef JPEGLIB_USE_STDIO
 
 
-#include "../thirdparty/libpng-1.5.2/png.h"
-#include "../thirdparty/libpng-1.5.2/pngstruct.h"
+#include "../thirdparty/libpng-1.6.39/png.h"
+#include "../thirdparty/libpng-1.6.39/pngstruct.h"
 
 #include <setjmp.h>
 

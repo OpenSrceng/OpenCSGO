@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -12,7 +12,7 @@
 #include "vgui/ISurface.h"
 #include "vgui_controls/Tooltip.h"
 #include "vgui/IVgui.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "vgui/ilocalize.h"
 #include "vgui/IInput.h"
 #include "VDropDownMenu.h"

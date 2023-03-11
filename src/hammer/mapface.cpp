@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ====
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ====
 //
 // Purpose: 
 //
@@ -11,7 +11,7 @@
 #include "MapFace.h"
 #include "MapDisp.h"
 #include "MapWorld.h"
-#include "fgdlib/WCKeyValues.h"
+#include "fgdlib/WCkeyvalues.h"
 #include "GlobalFunctions.h"
 #include "Render3D.h"
 #include "Render2D.h"

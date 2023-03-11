@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
@@ -12,7 +12,7 @@
 #include "filesystem.h"
 #include "mxtk/mx.h"
 #include "mxStatusWindow.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "StudioModel.h"
 #include "ControlPanel.h"
 #include "MDLViewer.h"

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: Implements the entity/prefab placement tool.
 //
@@ -8,7 +8,7 @@
 #include "hammer.h"
 #include "entitysprinkledlg.h"
 #include "mapdoc.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "toolmanager.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

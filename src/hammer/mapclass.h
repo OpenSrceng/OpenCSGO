@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: Defines a common class for all objects in the world object tree.
 //
@@ -24,7 +24,7 @@
 #pragma warning(pop)
 #include "BoundBox.h"
 #include "MapPoint.h"
-#include "UtlVector.h"
+#include "utlvector.h"
 #include "visgroup.h"
 #include "fgdlib/wckeyvalues.h"
 #include "tier1/smartptr.h"

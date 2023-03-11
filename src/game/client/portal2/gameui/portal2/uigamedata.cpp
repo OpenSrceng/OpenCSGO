@@ -25,7 +25,7 @@
 #include "utlbuffer.h"
 #include "filesystem/IXboxInstaller.h"
 #include "tier1/tokenset.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "filesystem/IXboxInstaller.h"
 
 #include <time.h>

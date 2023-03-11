@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
+//========= Copyright ï¿½ 1996-2001, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -16,7 +16,7 @@
 #include "movieobjects/dmemesh.h"
 #include "movieobjects/dmedrawsettings.h"
 #include "dme_controls/dmepanel.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "vguimatsurface/IMatSystemSurface.h"
 #include "tier3/tier3.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"

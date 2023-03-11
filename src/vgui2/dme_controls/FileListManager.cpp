@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+//====== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. =======//
 //
 // Purpose: 
 //
@@ -18,7 +18,7 @@
 #include <vgui/IInput.h>
 #include "vgui/mousecode.h"
 #include "tier1/strtools.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "tier2/tier2.h"
 #include "p4lib/ip4.h"
 #include "filesystem.h"

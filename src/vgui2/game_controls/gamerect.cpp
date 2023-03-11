@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // To handle scaling
 #include "materialsystem/imaterialsystem.h"
 #include "animdata.h"
-#include "Color.h"
+#include "color.h"
 #include "gameuisystemmgr.h"
 
 

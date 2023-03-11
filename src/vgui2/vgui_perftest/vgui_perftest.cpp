@@ -15,7 +15,7 @@
 #include "appframework/vguimatsysapp.h"
 #include "soundsystem/isoundsystem.h"
 #include "nowindows.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "vgui/IVGui.h"
 #include "vgui/ISystem.h"
 //#include "vgui/IScheme.h"

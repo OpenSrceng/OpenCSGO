@@ -14,7 +14,7 @@
 #include "vstdlib/cvar.h"
 #include "appframework/vguimatsysapp.h"
 #include "nowindows.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "materialsystem/IMaterialSystem.h"
 #include "vgui/IVGui.h"
 #include "vgui/ISystem.h"

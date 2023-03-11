@@ -9,7 +9,7 @@
 #include "vgui_controls/TextEntry.h"
 #include "vgui_controls/Splitter.h"
 #include "vgui_controls/Button.h"
-#include "KeyValues.h"
+#include "keyvalues.h"
 #include "vgui/KeyCode.h"
 #include "texturesystem.h"
 #include "HammerVGui.h"

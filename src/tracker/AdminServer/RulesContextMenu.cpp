@@ -11,7 +11,7 @@
 #include <VGUI_IInput.h>
 #include <VGUI_IPanel.h>
 #include <VGUI_ISurface.h>
-#include <VGUI_KeyValues.h>
+#include <VGUI_keyvalues.h>
 
 using namespace vgui;
 

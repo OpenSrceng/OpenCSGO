@@ -33,12 +33,12 @@
 #undef GetTickCount
 #endif
 
-#include <vgui/VGUI.h>
+#include <vgui/vgui.h>
 #include <vgui/ISystem.h>
-#include <KeyValues.h>
+#include <keyvalues.h>
 #include <vgui/IInputInternal.h>
 #include <vgui/ISurface.h>
-#include "FileSystem.h"
+#include "filesystem.h"
 
 #include "vgui_internal.h"
 #include "filesystem_helpers.h"

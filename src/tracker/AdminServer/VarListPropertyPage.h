@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include <KeyValues.h>
+#include <keyvalues.h>
 #include <vgui_controls/PropertyPage.h>
 
 #include "utlvector.h"

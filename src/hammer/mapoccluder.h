@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2009, Valve Corporation, All rights reserved. ====
+//========= Copyright ï¿½ 1996-2009, Valve Corporation, All rights reserved. ====
 //
 // Purpose: 
 //
@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "fgdlib/WCKeyValues.h"
+#include "fgdlib/WCkeyvalues.h"
 #include "MapSphere.h"
 #include "ToolInterface.h"
 #include "MapPointHandle.h"

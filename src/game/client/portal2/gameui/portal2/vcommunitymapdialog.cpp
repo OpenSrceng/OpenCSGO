@@ -14,7 +14,7 @@
 #include "vgui/ISurface.h"
 #include "vgui/IVGui.h"
 #include "vgui/ilocalize.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "VGenericConfirmation.h"
 #include "bitmap/tgaloader.h"
 #include "steamcloudsync.h"

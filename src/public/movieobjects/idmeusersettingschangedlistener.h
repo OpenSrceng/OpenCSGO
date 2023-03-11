@@ -7,7 +7,7 @@
 #pragma once
 #endif
 
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 
 #define NameKey "name"
 #define AttributeKey "attribute"

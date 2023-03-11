@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2004, Valve Corporation, All rights reserved. =======
 //
 // A class representing vertex data
 //
@@ -15,7 +15,7 @@
 #include "datamodel/dmattribute.h"
 #include "datamodel/dmattributevar.h"
 #include "mathlib/vector.h"
-#include "Color.h"
+#include "color.h"
 
 
 //-----------------------------------------------------------------------------

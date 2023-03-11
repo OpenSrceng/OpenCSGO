@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -14,7 +14,7 @@
 #include "ChunkFile.h"
 #include "ListBoxEx.h"
 #include "AngleBox.h"
-#include "fgdlib/WCKeyValues.h"
+#include "fgdlib/WCkeyvalues.h"
 #include "MapFace.h"
 #include "ObjectPage.h"
 #include "ToolPickAngles.h"

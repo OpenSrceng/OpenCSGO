@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -15,7 +15,7 @@
 #include "vgui_controls/Menu.h"
 #include "vgui_controls/PanelListPanel.h"
 #include "movieobjects/dmeanimationset.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "dme_controls/dmecontrols_utils.h"
 #include "vstdlib/random.h"
 #include "vgui/IVgui.h"

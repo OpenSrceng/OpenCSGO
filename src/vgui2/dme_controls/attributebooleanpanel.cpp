@@ -3,7 +3,7 @@
 #include "dme_controls/attributebooleanpanel.h"
 #include "dme_controls/AttributeTextEntry.h"
 #include "dme_controls/AttributeWidgetFactory.h"
-#include "tier1/KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "datamodel/dmelement.h"
 #include "movieobjects/dmeeditortypedictionary.h"
 #include "movieobjects/dmechannel.h"

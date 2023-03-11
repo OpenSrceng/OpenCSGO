@@ -6,7 +6,7 @@
 //=============================================================================
 
 #include "ClickableTabbedPanel.h"
-#include <vgui/KeyValues.h>
+#include <vgui/keyvalues.h>
 
 
 using namespace vgui;

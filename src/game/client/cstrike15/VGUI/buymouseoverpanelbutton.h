@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include <KeyValues.h>
+#include <keyvalues.h>
 #include <filesystem.h>
 #include "mouseoverpanelbutton.h"
 #include "hud.h"

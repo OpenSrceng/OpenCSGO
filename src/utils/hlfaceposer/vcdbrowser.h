@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -14,8 +14,8 @@
 #include "commctrl.h"
 #include "utldict.h"
 #include "faceposertoolwindow.h"
-#include "FileSystem.h"
-#include "tier1/UtlSortVector.h"
+#include "filesystem.h"
+#include "tier1/utlsortvector.h"
 
 class CVCDList;
 class CUtlSymbolTree;

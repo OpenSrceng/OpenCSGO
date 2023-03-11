@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -10,7 +10,7 @@
 #include "vgui_controls/ListPanel.h"
 #include "vgui_controls/Button.h"
 #include "datamodel/dmelement.h"
-#include "vgui/isurface.h"
+#include "vgui/ISurface.h"
 #include "vgui/iinput.h"
 #include "dme_controls/dmecontrols_utils.h"
 

@@ -10,7 +10,7 @@
 #include "hud_macros.h"
 #include "iclientmode.h"
 #include "view.h"
-#include <KeyValues.h>
+#include <keyvalues.h>
 #include <vgui/ISurface.h>
 #include <vgui_controls/Panel.h>
 #include "VGuiMatSurface/IMatSystemSurface.h"

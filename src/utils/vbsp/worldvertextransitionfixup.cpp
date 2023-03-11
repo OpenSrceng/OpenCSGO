@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2007, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2007, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -7,7 +7,7 @@
 #include "bsplib.h"
 #include "vbsp.h"
 #include "tier1/UtlBuffer.h"
-#include "tier1/UtlVector.h"
+#include "tier1/utlvector.h"
 #include "keyvalues.h"
 #include "materialpatch.h"
 

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: TrackIR handling function
 //
@@ -32,7 +32,7 @@
 #include "iviewrender.h"
 #include "convar.h"
 #include "hud.h"
-#include "vgui/isurface.h"
+#include "vgui/ISurface.h"
 #include "vgui_controls/controls.h"
 #include "vgui/cursor.h"
 #include "tier0/icommandline.h"

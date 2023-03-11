@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -17,7 +17,7 @@
 #include "vmpi_distribute_work.h"
 #include "vmpi_tools_shared.h"
 #include "cmdlib.h"
-#include "UtlVector.h"
+#include "utlvector.h"
 #include "Utlhash.h"
 #include "UtlBuffer.h"
 #include "utlstring.h"

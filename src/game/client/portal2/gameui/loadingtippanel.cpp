@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2008, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: Tip display during level loads.
 //
@@ -7,7 +7,7 @@
 #include "loadingtippanel.h"
 #include "filesystem.h"
 #include "keyvalues.h"
-#include "vgui/isurface.h"
+#include "vgui/ISurface.h"
 #include "EngineInterface.h"
 #include "vstdlib/random.h"
 #include "fmtstr.h"

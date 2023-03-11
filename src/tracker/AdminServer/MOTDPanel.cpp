@@ -14,7 +14,7 @@
 #include <VGUI_ISystem.h>
 #include <VGUI_ISurface.h>
 #include <VGUI_IVGui.h>
-#include <VGUI_KeyValues.h>
+#include <VGUI_keyvalues.h>
 #include <VGUI_Label.h>
 #include <VGUI_TextEntry.h>
 #include <VGUI_Button.h>

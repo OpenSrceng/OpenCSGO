@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+//===== Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
@@ -26,7 +26,7 @@
 #include "choreoevent.h"
 #include "choreoscene.h"
 #include "ChoreoView.h"
-#include "FileSystem.h"
+#include "filesystem.h"
 #include "UtlBuffer.h"
 #include "AudioWaveOutput.h"
 #include "StudioModel.h"

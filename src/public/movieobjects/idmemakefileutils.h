@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =====//
+//====== Copyright ï¿½ 1996-2004, Valve Corporation, All rights reserved. =====//
 //
 // Interface for makefiles to build differently depending on where they are run from
 //
@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "appframework/IAppSystem.h"
+#include "appframework/iappsystem.h"
 #include "vstdlib/iprocessutils.h"
 
 
