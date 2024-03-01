@@ -1,0 +1,46 @@
+#! /usr/bin/env python
+
+def options(opt):
+	return
+
+def configure(conf):
+	conf.define('EMU_RELEASE_BUILD', True)
+
+def build(bld):
+	libs = ['protobuf']
+
+	includes = []
+
+	source = [
+		'base.cpp',
+		'dll.cpp',
+		'flat.cpp',
+		'local_storage.cpp',
+		'network.cpp',
+		'settings.cpp',
+		'settings_parser.cpp',
+		'steam_applist.cpp',
+		'steam_apps.cpp',
+		'steam_client.cpp',
+		'steam_gameserver.cpp',
+		'steam_gameserverstats.cpp',
+		'steam_http.cpp',
+		'steam_matchmaking_servers.cpp',
+		'steam_music.cpp',
+		'steam_musicremote.cpp',
+		'steam_parental.cpp',
+		'steam_screenshots.cpp',
+		'steam_video.cpp',
+		'net.pb.cc'
+	]
+
+	bld.shlib(
+		source   = source,
+		target   = 'steam_api',
+		features = 'cxx',
+		includes = includes,
+		use      = libs,
+		install_path = bld.env.BINPATH,
+		subsystem = bld.env.MSVC_SUBSYSTEM,
+		idx = bld.get_taskgen_count()
+	)

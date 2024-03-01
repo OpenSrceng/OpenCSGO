@@ -14,7 +14,10 @@ Context.Context.line_just = 60 # should fit for everything on 80x26
 PROJECTS = [
 	'appframework',
 	'd3dx',
+	'generated_proto',
 	'interfaces',
+	'mathlib',
+	'thirdparty/cryptopp-8.9.0',
 	'thirdparty/dxvk-native-1.9.2b/src/d3d9',
 	'thirdparty/dxvk-native-1.9.2b/src/dxso',
 	'thirdparty/dxvk-native-1.9.2b/src/dxvk',
@@ -23,6 +26,8 @@ PROJECTS = [
 	'thirdparty/dxvk-native-1.9.2b/src/vulkan',
 	'thirdparty/dxvk-native-1.9.2b/src/wsi',
 	'thirdparty/freetype-2.13.2',
+	'thirdparty/goldberg_emulator/dll',
+	'thirdparty/protobuf-3.6.1/src',
 	'tier0',
 	'tier1',
 	'tier2',
@@ -144,6 +149,7 @@ def configure(conf):
 		os.path.abspath('public/tier0'),
 		os.path.abspath('public/tier1'),
 		os.path.abspath('common'),
+		os.path.abspath('thirdparty/protobuf-3.6.1/src'),
 		os.path.abspath('thirdparty/DirectXMath-dec2023/Inc')
 	]
 

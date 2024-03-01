@@ -58,10 +58,10 @@ _PS_EXTERN_CONST(am_pi_o_2, (float)(M_PI / 2.0));
 _PS_EXTERN_CONST(am_2_o_pi, (float)(2.0 / M_PI));
 _PS_EXTERN_CONST(am_pi_o_4, (float)(M_PI / 4.0));
 _PS_EXTERN_CONST(am_4_o_pi, (float)(4.0 / M_PI));
-_PS_EXTERN_CONST_TYPE(am_sign_mask, int32, 0x80000000);
+_PS_EXTERN_CONST_TYPE(am_sign_mask, int32, (int32)0x80000000);
 _PS_EXTERN_CONST_TYPE(am_inv_sign_mask, int32, ~0x80000000);
-_PS_EXTERN_CONST_TYPE(am_min_norm_pos,int32, 0x00800000);
-_PS_EXTERN_CONST_TYPE(am_mant_mask, int32, 0x7f800000);
+_PS_EXTERN_CONST_TYPE(am_min_norm_pos,int32, (int32)0x00800000);
+_PS_EXTERN_CONST_TYPE(am_mant_mask, int32, (int32)0x7f800000);
 _PS_EXTERN_CONST_TYPE(am_inv_mant_mask, int32, ~0x7f800000);
 
 _EPI32_CONST(1, 1);
@@ -175,7 +175,7 @@ float FASTCALL _SSE_VectorNormalize (Vector& vec)
 //#define _PS_CONST(Name, Val) static const ALIGN16 float _ps_##Name[4] ALIGN16_POST = { Val, Val, Val, Val }
 #define _PS_CONST_TYPE(Name, Type, Val) static const ALIGN16 Type _ps_##Name[4] ALIGN16_POST = { Val, Val, Val, Val }
 
-_PS_CONST_TYPE(sign_mask, int, 0x80000000);
+_PS_CONST_TYPE(sign_mask, int, (int)0x80000000);
 _PS_CONST_TYPE(inv_sign_mask, int, ~0x80000000);
 
 
@@ -211,160 +211,6 @@ typedef __m128 v4sf;  // vector of 4 float (sse1)
 typedef __m64 v2si;   // vector of 2 int (mmx)
 
 #endif
-
-
-float FastCos( float x )  
-{
-#if defined( _WIN32 ) && !defined( _WIN64 )
-	float temp;
-	__asm
-	{
-		movss	xmm0, x
-		movss	xmm1, _ps_am_inv_sign_mask
-		andps	xmm0, xmm1
-		addss	xmm0, _ps_am_pi_o_2
-		mulss	xmm0, _ps_am_2_o_pi
-		
-		cvttss2si	ecx, xmm0
-		movss	xmm5, _ps_am_1
-		mov		edx, ecx
-		shl		edx, (31 - 1)
-		cvtsi2ss	xmm1, ecx
-		and		edx, 0x80000000
-		and		ecx, 0x1
-		
-		subss	xmm0, xmm1
-		movss	xmm6, _sincos_masks[ecx * 4]
-		minss	xmm0, xmm5
-		
-		movss	xmm1, _ps_sincos_p3
-		subss	xmm5, xmm0
-		
-		andps	xmm5, xmm6
-		movss	xmm7, _ps_sincos_p2
-		andnps	xmm6, xmm0
-		mov		temp, edx
-		orps	xmm5, xmm6
-		movss	xmm0, xmm5
-		
-		mulss	xmm5, xmm5
-		movss	xmm4, _ps_sincos_p1
-		movss	xmm2, xmm5
-		mulss	xmm5, xmm1
-		movss	xmm1, _ps_sincos_p0
-		addss	xmm5, xmm7
-		mulss	xmm5, xmm2
-		movss	xmm3, temp
-		addss	xmm5, xmm4
-		mulss	xmm5, xmm2
-		orps	xmm0, xmm3
-		addss	xmm5, xmm1
-		mulss	xmm0, xmm5
-		
-		movss   x,    xmm0
-		
-	}
-#elif defined( _WIN64 )
-	return cosf( x );
-#elif POSIX
-	
-	v4sf xmm1, xmm2 = _mm_setzero_ps(), xmm3, y;
-	v2si mm0, mm1, mm2, mm3;
-	/* take the absolute value */
-	v4sf  xx = _mm_load_ss( &x );
-	
-	xx = _mm_and_ps(xx, *(v4sf*)_ps_inv_sign_mask);
-	
-	/* scale by 4/Pi */
-	y = _mm_mul_ps(xx, *(v4sf*)_ps_cephes_FOPI);
-	
-	/* store the integer part of y in mm0:mm1 */
-	xmm2 = _mm_movehl_ps(xmm2, y);
-	mm2 = _mm_cvttps_pi32(y);
-	mm3 = _mm_cvttps_pi32(xmm2);
-	
-	/* j=(j+1) & (~1) (see the cephes sources) */
-	mm2 = _mm_add_pi32(mm2, *(v2si*)_pi32_1);
-	mm3 = _mm_add_pi32(mm3, *(v2si*)_pi32_1);
-	mm2 = _mm_and_si64(mm2, *(v2si*)_pi32_inv1);
-	mm3 = _mm_and_si64(mm3, *(v2si*)_pi32_inv1);
-	
-	y = _mm_cvtpi32x2_ps(mm2, mm3);
-	
-	
-	mm2 = _mm_sub_pi32(mm2, *(v2si*)_pi32_2);
-	mm3 = _mm_sub_pi32(mm3, *(v2si*)_pi32_2);
-	
-	/* get the swap sign flag in mm0:mm1 and the 
-	 polynom selection mask in mm2:mm3 */
-	
-	mm0 = _mm_andnot_si64(mm2, *(v2si*)_pi32_4);
-	mm1 = _mm_andnot_si64(mm3, *(v2si*)_pi32_4);
-	mm0 = _mm_slli_pi32(mm0, 29);
-	mm1 = _mm_slli_pi32(mm1, 29);
-	
-	mm2 = _mm_and_si64(mm2, *(v2si*)_pi32_2);
-	mm3 = _mm_and_si64(mm3, *(v2si*)_pi32_2);
-	
-	mm2 = _mm_cmpeq_pi32(mm2, _mm_setzero_si64());
-	mm3 = _mm_cmpeq_pi32(mm3, _mm_setzero_si64());
-	
-	v4sf sign_bit, poly_mask;
-	COPY_MM_TO_XMM(mm0, mm1, sign_bit);
-	COPY_MM_TO_XMM(mm2, mm3, poly_mask);
-	_mm_empty(); /* good-bye mmx */
-	
-	/* The magic pass: "Extended precision modular arithmetic" 
-	 x = ((x - y * DP1) - y * DP2) - y * DP3; */
-	xmm1 = *(v4sf*)_ps_minus_cephes_DP1;
-	xmm2 = *(v4sf*)_ps_minus_cephes_DP2;
-	xmm3 = *(v4sf*)_ps_minus_cephes_DP3;
-	xmm1 = _mm_mul_ps(y, xmm1);
-	xmm2 = _mm_mul_ps(y, xmm2);
-	xmm3 = _mm_mul_ps(y, xmm3);
-	xx = _mm_add_ps(xx, xmm1);
-	xx = _mm_add_ps(xx, xmm2);
-	xx = _mm_add_ps(xx, xmm3);
-	
-	/* Evaluate the first polynom  (0 <= x <= Pi/4) */
-	y = *(v4sf*)_ps_coscof_p0;
-	v4sf z = _mm_mul_ps(xx,xx);
-	
-	y = _mm_mul_ps(y, z);
-	y = _mm_add_ps(y, *(v4sf*)_ps_coscof_p1);
-	y = _mm_mul_ps(y, z);
-	y = _mm_add_ps(y, *(v4sf*)_ps_coscof_p2);
-	y = _mm_mul_ps(y, z);
-	y = _mm_mul_ps(y, z);
-	v4sf tmp = _mm_mul_ps(z, *(v4sf*)_ps_0p5);
-	y = _mm_sub_ps(y, tmp);
-	y = _mm_add_ps(y, *(v4sf*)_ps_1);
-	
-	/* Evaluate the second polynom  (Pi/4 <= x <= 0) */
-	
-	v4sf y2 = *(v4sf*)_ps_sincof_p0;
-	y2 = _mm_mul_ps(y2, z);
-	y2 = _mm_add_ps(y2, *(v4sf*)_ps_sincof_p1);
-	y2 = _mm_mul_ps(y2, z);
-	y2 = _mm_add_ps(y2, *(v4sf*)_ps_sincof_p2);
-	y2 = _mm_mul_ps(y2, z);
-	y2 = _mm_mul_ps(y2, xx);
-	y2 = _mm_add_ps(y2, xx);
-	
-	/* select the correct result from the two polynoms */  
-	xmm3 = poly_mask;
-	y2 = _mm_and_ps(xmm3, y2); //, xmm3);
-	y = _mm_andnot_ps(xmm3, y);
-	y = _mm_add_ps(y,y2);
-	/* update the sign */
-	
-	_mm_store_ss( &x, _mm_xor_ps(y, sign_bit) );
-	
-#else
-#error "Not Implemented"
-#endif
-	return x;
-}
 
 
 // SSE Version of VectorTransform
