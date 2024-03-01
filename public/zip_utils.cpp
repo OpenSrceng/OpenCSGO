@@ -19,7 +19,7 @@
 #include "zip_utils.h"
 #include "zip_uncompressed.h"
 #include "checksum_crc.h"
-#include "byteswap.h"
+#include "vbyteswap.h"
 #include "utlstring.h"
 
 // NOTE: This has to be the last file included!

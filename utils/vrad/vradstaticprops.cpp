@@ -27,7 +27,7 @@
 #include "pacifier.h"
 #include "materialsystem/imaterial.h"
 #include "materialsystem/hardwareverts.h"
-#include "byteswap.h"
+#include "vbyteswap.h"
 #include "mpivrad.h"
 #include "vtf/vtf.h"
 #include "tier1/utldict.h"

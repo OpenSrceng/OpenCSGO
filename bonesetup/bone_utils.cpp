@@ -10,7 +10,7 @@
 #include "mathlib/mathlib.h"
 #include "bone_setup.h"
 #include <string.h>
-#ifdef POSIX
+#ifndef _rotl
 #define _rotl(x,k) (((x)<<(k)) | ((x)>>(32-(k))))
 #endif
 #include "collisionutils.h"

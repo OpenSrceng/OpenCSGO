@@ -479,69 +479,12 @@ inline vec_t RoundInt (vec_t in)
 
 size_t Q_log2( unsigned int val );
 
+#include <DirectXMath.h>
+
 // Math routines done in optimized assembly math package routines
-void inline SinCos( float radians, float * RESTRICT sine, float * RESTRICT cosine )
+FORCEINLINE void SinCos( float radians, float * RESTRICT sine, float * RESTRICT cosine )
 {
-#if defined( _X360 )
-	XMScalarSinCos( sine, cosine, radians );
-#elif defined( _PS3 )
-#if ( __GNUC__ == 4 ) && ( __GNUC_MINOR__ == 1 ) && ( __GNUC_PATCHLEVEL__ == 1 )
-	vector_float_union s;
-	vector_float_union c;
-
-	vec_float4 rad = vec_splats( radians );
-	vec_float4 sin;
-	vec_float4 cos;
-
-	sincosf4( rad, &sin, &cos );
-
-	vec_st( sin, 0, s.f );
-	vec_st( cos, 0, c.f );
-
-	*sine   = s.f[0];
-	*cosine = c.f[0];
-#else //__GNUC__ == 4 && __GNUC_MINOR__ == 1 && __GNUC_PATCHLEVEL__ == 1
-	vector_float_union r;
-	vector_float_union s;
-	vector_float_union c;
-
-	vec_float4 rad;
-	vec_float4 sin;
-	vec_float4 cos;
-
-	r.f[0] = radians;
-	rad = vec_ld( 0, r.f );
-
-	sincosf4( rad, &sin, &cos );
-
-	vec_st( sin, 0, s.f );
-	vec_st( cos, 0, c.f );
-
-	*sine   = s.f[0];
-	*cosine = c.f[0];
-#endif //__GNUC__ == 4 && __GNUC_MINOR__ == 1 && __GNUC_PATCHLEVEL__ == 1
-#elif defined( COMPILER_MSVC32 )
-	_asm
-	{
-		fld		DWORD PTR [radians]
-		fsincos
-
-		mov edx, DWORD PTR [cosine]
-		mov eax, DWORD PTR [sine]
-
-		fstp DWORD PTR [edx]
-		fstp DWORD PTR [eax]
-	}
-#elif defined( GNUC )
-	register double __cosr, __sinr;
- 	__asm __volatile__ ("fsincos" : "=t" (__cosr), "=u" (__sinr) : "0" (radians));
-
-  	*sine = __sinr;
-  	*cosine = __cosr;
-#else
-	*sine = sinf(radians);
-	*cosine = cosf(radians);
-#endif
+	DirectX::XMScalarSinCos( sine, cosine, radians );
 }
 
 #define SIN_TABLE_SIZE	256
@@ -550,10 +493,6 @@ extern float SinCosTable[SIN_TABLE_SIZE];
 
 inline float TableCos( float theta )
 {
-#if defined( LINUX )
-	return cos(theta); // under the GCC compiler the float-represented-as-an-int causes an internal compiler error
-#else
-
 	union
 	{
 		int i;
@@ -563,14 +502,10 @@ inline float TableCos( float theta )
 	// ideally, the following should compile down to: theta * constant + constant, changing any of these constants from defines sometimes fubars this.
 	ftmp.f = theta * ( float )( SIN_TABLE_SIZE / ( 2.0f * M_PI ) ) + ( FTOIBIAS + ( SIN_TABLE_SIZE / 4 ) );
 	return SinCosTable[ ftmp.i & ( SIN_TABLE_SIZE - 1 ) ];
-#endif
 }
 
 inline float TableSin( float theta )
 {
-#if defined( LINUX )
-	return sin(theta); // under the GCC compiler the float-represented-as-an-int causes an internal compiler error
-#else
 	union
 	{
 		int i;
@@ -580,7 +515,6 @@ inline float TableSin( float theta )
 	// ideally, the following should compile down to: theta * constant + constant
 	ftmp.f = theta * ( float )( SIN_TABLE_SIZE / ( 2.0f * M_PI ) ) + FTOIBIAS;
 	return SinCosTable[ ftmp.i & ( SIN_TABLE_SIZE - 1 ) ];
-#endif
 }
 
 template<class T>

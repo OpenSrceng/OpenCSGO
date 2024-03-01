@@ -105,9 +105,17 @@ FORCEINLINE float VECTORCALL FastRSqrt( float x )
 	return (0.5f * rroot) * (3.f - (x * rroot) * rroot);
 }
 
-void FastSinCos( float x, float* s, float* c );  // any x
-float FastCos( float x );
+#include <DirectXMath.h>
 
+FORCEINLINE void FastSinCos( float x, float* s, float* c )
+{
+	DirectX::XMScalarSinCos( s, c, x );
+}
+
+FORCEINLINE float FastCos( float x )
+{
+	return DirectX::XMScalarCosEst( x );
+}
 
 
 inline float FastRecip(float x) {return 1.0f / x;}

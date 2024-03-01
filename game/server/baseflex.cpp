@@ -22,7 +22,7 @@
 #include "sceneentity.h"
 #include "ai_baseactor.h"
 #include "datacache/imdlcache.h"
-#include "tier1/byteswap.h"
+#include "tier1/vbyteswap.h"
 #include "toolframework/itoolframework.h"
 #include "flexcycler.h"
 

@@ -13,7 +13,7 @@
 #include "gamebspfile.h"
 #include "VPhysics_Interface.h"
 #include "Studio.h"
-#include "byteswap.h"
+#include "vbyteswap.h"
 #include "UtlBuffer.h"
 #include "CollisionUtils.h"
 #include <float.h>

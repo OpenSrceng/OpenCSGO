@@ -7,7 +7,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#if defined( PLATFORM_OSX )
 #include <sys/sysctl.h>
+#endif
 #include <sys/time.h>
 #include <unistd.h>
 #include <tier0/platform.h>
@@ -37,7 +39,7 @@ static inline uint64 diff(uint64 v1, uint64 v2)
 	return (v1 >= v2 ? v1 - v2 : v2 - v1);
 }
 
-#ifdef OSX
+#if defined( PLATFORM_OSX )
 uint64 GetCPUFreqFromPROC()
 {
         int mib[2] = {CTL_HW, HW_CPU_FREQ};

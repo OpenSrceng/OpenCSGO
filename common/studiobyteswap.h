@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "byteswap.h"
+#include "vbyteswap.h"
 struct studiohdr_t;
 class IPhysicsCollision;
 

@@ -15,7 +15,7 @@
 
 #include "s3tc_decode.h"
 #include "vtf/vtf.h"
-#include "byteswap.h"
+#include "vbyteswap.h"
 #include "filesystem.h"
 
 class CEdgePos

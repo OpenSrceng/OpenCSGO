@@ -1,6 +1,8 @@
 #ifndef THREADTOOLS_INL
 #define THREADTOOLS_INL
 
+#pragma once
+
 // This file is included in threadtools.h for PS3 and threadtools.cpp for all other platforms
 //
 // Do not #include other files here
@@ -446,7 +448,7 @@ INLINE_ON_PS3 void CThread::Yield()
 	// sys_ppu_thread_yield doesn't seem to function properly, so sleep instead.
 	sys_timer_usleep( 60 );
 #elif defined(POSIX)
-	pthread_yield();
+	sched_yield();
 #endif
 }
 

@@ -25,7 +25,7 @@
 #include "CollisionUtils.h"
 #include <float.h>
 #include "UtlLinkedList.h"
-#include "byteswap.h"
+#include "vbyteswap.h"
 #include "writebsp.h"
 
 //-----------------------------------------------------------------------------

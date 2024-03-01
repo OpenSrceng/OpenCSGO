@@ -9,9 +9,7 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
-#if defined(__x86_64__) || defined(_WIN64)
-#define PLATFORM_64BITS 1
-#endif
+#pragma once
 
 #if defined( LINUX ) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 406
 // based on some Jonathan Wakely macros on the net...
@@ -27,7 +25,7 @@
 #define GCC_DIAG_POP()
 #endif
 
-#ifdef LINUX
+#if defined( LINUX )
 #pragma GCC diagnostic ignored "-Wconversion-null"	// passing NULL to non-pointer argument 1
 #pragma GCC diagnostic ignored "-Wpointer-arith"	// NULL used in arithmetic. Ie, vpanel == NULL where VPANEL is uint.
 #endif
@@ -72,10 +70,6 @@
 #endif
 
 
-#ifdef COMPILER_MSVC
-#pragma once
-#endif
-
 #if defined (_PS3)
 
 #if defined( __SPU__ )
@@ -110,7 +104,6 @@
 	#include <pmcpbsetup.h>
 	#include <xmahardwareabstraction.h>
 	#undef _XBOX
-
 #endif
 
 #include "wchartypes.h"
@@ -210,18 +203,7 @@
 #define BINK_ENABLED_FOR_CONSOLE
 #endif
 
-#if defined( _MSC_VER )
 #define OVERRIDE override
-// warning C4481: nonstandard extension used: override specifier 'override'
-#pragma warning(disable : 4481)
-#elif defined( __clang__ )
-#define OVERRIDE override
-// warning: 'override' keyword is a C++11 extension [-Wc++11-extensions]
-// Disabling this warning is less intrusive than enabling C++11 extensions
-#pragma GCC diagnostic ignored "-Wc++11-extensions"
-#else
-#define OVERRIDE
-#endif
 
 #if _MSC_VER >= 1800
 #define	VECTORCALL __vectorcall 
@@ -377,20 +359,6 @@
 #endif
 
 
-
-#ifndef _PS3
-//#include <malloc.h>
-//#include <new.h>
-#else
-#include <stdlib.h>     // For malloc()
-#include <alloca.h>     // for alloca()
-#define _alloca alloca
-	#ifdef __cplusplus
-		#include <new>
-	#endif
-#endif
-
-
 //-----------------------------------------------------------------------------
 // Old-school defines we're going to support since much code uses them
 //-----------------------------------------------------------------------------
@@ -405,10 +373,6 @@
 // Setup platform defines.
 #ifdef COMPILER_MSVC
 #define MSVC 1
-#endif
-
-#ifdef COMPILER_GCC
-#define GNUC 1
 #endif
 
 #if defined( _WIN32 )
@@ -518,7 +482,6 @@ typedef signed char					int8;
 		typedef int					intp;
 		typedef unsigned int		uintp;
 	#endif
-	typedef void *HWND;
 
     // [u]int64 are actually defined as 'long long' and gcc 64-bit
     // doesn't automatically consider them the same as 'long int'.
@@ -529,9 +492,8 @@ typedef signed char					int8;
     typedef long int lint64;
     typedef unsigned long int ulint64;
 
-	#ifndef OVERRIDE // suppress redifinition warning (because we don't have CROSS_PLATFORM_VERSION defined)
-		#define OVERRIDE
-	#endif
+	#define OVERRIDE override
+
 #endif // else COMPILER_MSVC
 
 #if defined(_PS3) && !defined(NO_SIMD)
@@ -682,7 +644,7 @@ typedef void * HINSTANCE;
 #define VALVE_RAND_MAX 0x7fff
 
 // Maximum and minimum representable values
-#ifndef PLATFORM_OSX
+#ifdef _MSC_VER
 
 #if _MSC_VER >= 1800 // VS 2013 or higher
 	// Copied from stdint.h
@@ -720,7 +682,7 @@ typedef void * HINSTANCE;
 #define  UINT32_MIN			0
 #define  UINT64_MIN			0
 
-#endif // PLATFORM_OSX
+#endif // _MSC_VER
 
 #ifndef  UINT_MIN
 #define  UINT_MIN			UINT32_MIN
@@ -729,20 +691,9 @@ typedef void * HINSTANCE;
 #define  FLOAT32_MAX		FLT_MAX
 #define  FLOAT64_MAX		DBL_MAX
 
-#ifdef GNUC
-#undef offsetof
-// Note: can't use builtin offsetof because many use cases (esp. in templates) wouldn't compile due to restrictions on the builtin offsetof
-//#define offsetof( type, var ) __builtin_offsetof( type, var ) 
-#define offsetof(s,m)	( (size_t)&(((s *)0x1000000)->m) - 0x1000000u )
-#else
-#include <stddef.h>
-#undef offsetof
-#define offsetof(s,m)	(size_t)&(((s *)0)->m)
-#endif
-
-
 #define  FLOAT32_MIN		FLT_MIN
 #define  FLOAT64_MIN		DBL_MIN
+
 
 //-----------------------------------------------------------------------------
 // Long is evil because it's treated differently by different compilers
@@ -859,14 +810,8 @@ typedef void * HINSTANCE;
 	#define MULTIPLE_INHERITANCE
 	#define EXPLICIT
 	#define NO_VTABLE
-
 	#define NULLTERMINATED			
-
-#if defined( COMPILER_SNC )
-	#define TEMPLATE_STATIC static
-#else
-	#define TEMPLATE_STATIC
-#endif
+	#define TEMPLATE_STATIC			static
 
 	// Used for dll exporting and importing
 	#ifdef COMPILER_SNC
@@ -953,20 +898,7 @@ typedef void * HINSTANCE;
 
 // This implementation of compile time assert has zero cost (so it can safely be
 // included in release builds) and can be used at file scope or function scope.
-#ifdef __GNUC__
-       #define COMPILE_TIME_ASSERT( pred ) typedef int UNIQUE_ID[ (pred) ? 1 : -1 ]
-#else
-       #if _MSC_VER >= 1600
-       // If available use static_assert instead of weird language tricks. This
-       // leads to much more readable messages when compile time assert constraints
-       // are violated.
-       #define COMPILE_TIME_ASSERT( pred ) static_assert( pred, "Compile time assert constraint is not true: " #pred )
-       #else
-       // Due to gcc bugs this can in rare cases (some template functions) cause redeclaration
-       // errors when used multiple times in one scope. Fix by adding extra scoping.
-       #define COMPILE_TIME_ASSERT( pred ) typedef char compile_time_assert_type[(pred) ? 1 : -1];
-       #endif
-#endif
+#define COMPILE_TIME_ASSERT( pred ) static_assert( pred, "Compile time assert constraint is not true: " #pred )
 // ASSERT_INVARIANT used to be needed in order to allow COMPILE_TIME_ASSERTs at global
 // scope. However the new COMPILE_TIME_ASSERT macro supports that by default.
 #define ASSERT_INVARIANT( pred )	COMPILE_TIME_ASSERT( pred )
@@ -1176,13 +1108,13 @@ FORCEINLINE double fsel(double fComparand, double fValGE, double fLT)
 #define PLATFORM_CLASS		DLL_CLASS_IMPORT
 #endif
 
-#else	// BUILD_AS_DLL
+#else	// STATIC_TIER0
 
 #define PLATFORM_INTERFACE	extern
 #define PLATFORM_OVERLOAD
 #define PLATFORM_CLASS
 
-#endif	// BUILD_AS_DLL
+#endif	// STATIC_TIER0
 
 //-----------------------------------------------------------------------------
 // Returns true if debugger attached, false otherwise
@@ -1248,10 +1180,7 @@ PLATFORM_INTERFACE void Plat_MessageBox( const char *pTitle, const tchar *pMessa
 #define _wtoi(arg) wcstol(arg, NULL, 10)
 #define _wtoi64(arg) wcstoll(arg, NULL, 10)
 
-#ifndef _PS3
-typedef uintp HMODULE;
-#endif
-typedef void *HANDLE;
+#include <windows_base.h>
 #define __cdecl
 
 #if !defined( _snprintf )	// some vpc's define this on the command line
@@ -1884,12 +1813,6 @@ struct CPUInformation
 
 	uint32 m_nModel;
 	uint32 m_nFeatures[ 3 ];
-	uint32 m_nL1CacheSizeKb;
-	uint32 m_nL1CacheDesc;
-	uint32 m_nL2CacheSizeKb;
-	uint32 m_nL2CacheDesc;
-	uint32 m_nL3CacheSizeKb;
-	uint32 m_nL3CacheDesc;
 
 	CPUInformation(): m_Size(0){}
 };

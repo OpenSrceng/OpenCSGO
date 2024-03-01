@@ -28,7 +28,7 @@
 #include "tier1/UtlString.h"
 #include "UnicodeFileHelpers.h"
 #include "tier0/icommandline.h"
-#include "byteswap.h"
+#include "vbyteswap.h"
 
 #if defined( _X360 )
 #include "xbox/xbox_win32stubs.h"

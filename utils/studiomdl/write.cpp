@@ -30,7 +30,7 @@
 #include "physics2collision.h"
 #include "optimize.h"
 #include "studiobyteswap.h"
-#include "byteswap.h"
+#include "vbyteswap.h"
 #include "materialsystem/IMaterial.h"
 #include "materialsystem/IMaterialVar.h"
 #include "mdlobjects/dmeboneflexdriver.h"
