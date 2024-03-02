@@ -8,9 +8,7 @@
 #ifndef BASETYPES_H
 #define BASETYPES_H
 
-#ifdef COMPILER_MSVC
 #pragma once
-#endif
 
 
 // This is a trick to get the DLL extension off the -D option on the command line.
@@ -20,8 +18,8 @@
 
 //////////////////////////////////////////////////////////////////////////
 
-#ifndef schema
-#define schema namespace ValveSchemaMarker {}
+#ifndef vschema
+#define vschema namespace ValveSchemaMarker {}
 #endif
 #define noschema
 #define schema_pragma( ... )

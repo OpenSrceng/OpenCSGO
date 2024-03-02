@@ -812,9 +812,6 @@ CON_COMMAND( users, "Show user info for players on server." )
 //-----------------------------------------------------------------------------
 // Purpose: Determine the value of sv.maxclients
 //-----------------------------------------------------------------------------
-bool CL_IsHL2Demo(); // from cl_main.cpp
-bool CL_IsPortalDemo(); // from cl_main.cpp
-
 void CGameServer::InitMaxClients( void )
 {
     int minmaxplayers = 1;
@@ -881,13 +878,6 @@ void CGameServer::InitMaxClients( void )
     }
 
     newmaxplayers = clamp( newmaxplayers, m_nMinClientsLimit, m_nMaxClientsLimit );
-
-    if ( ( CL_IsHL2Demo() || CL_IsPortalDemo() ) && !IsDedicated() )
-    {
-        newmaxplayers = 1;
-        m_nMinClientsLimit = 1;
-        m_nMaxClientsLimit = 1;
-    }
 
     SetMaxClients( newmaxplayers );
 }
@@ -1027,58 +1017,6 @@ void SV_InitGameDLL( void )
     {
         return;
     }
-
-#if !defined(DEDICATED) && !defined( _GAMECONSOLE )
-    bool CL_IsHL2Demo();
-    if ( CL_IsHL2Demo() && !sv.IsDedicated() && Q_stricmp( COM_GetModDirectory(), "hl2" ) )
-    {
-        Error( "The HL2 demo is unable to run Mods.\n" );
-        return;			
-    } 
-
-    if ( CL_IsPortalDemo() && !sv.IsDedicated() && Q_stricmp( COM_GetModDirectory(), "portal" ) )
-    {
-        Error( "The Portal demo is unable to run Mods.\n" );
-        return;			
-    } 
-
-    // check permissions
-
-    if ( Steam3Client().SteamApps() && g_pFileSystem->IsSteam() && !CL_IsHL2Demo() && !CL_IsPortalDemo() )
-    {
-        bool bVerifiedMod = false;
-
-        // find the game dir we're running
-        for ( int i = 0; i < ARRAYSIZE( g_ModDirPermissions ); i++ )
-        {
-            if ( !Q_stricmp( COM_GetModDirectory(), g_ModDirPermissions[i].m_pchGameDir ) )
-            {
-                // we've found the mod, make sure we own the app
-                if (  Steam3Client().SteamApps()->BIsSubscribedApp( g_ModDirPermissions[i].m_iAppID ) )
-                {
-                    bVerifiedMod = true;
-                }
-                else
-                {
-                    Error( "No permissions to run '%s'\n", COM_GetModDirectory() );
-                    return;			
-                }
-
-                break;
-            }
-        }
-
-        if ( !bVerifiedMod )
-        {
-            // make sure they can run the Source engine
-            if ( ! Steam3Client().SteamApps()->BIsSubscribedApp( 215  ) )
-            {
-                Error( "A Source engine game is required to run mods\n" );
-                return;
-            }
-        }
-    }
-#endif
 
     if ( !serverGameDLL )
     {

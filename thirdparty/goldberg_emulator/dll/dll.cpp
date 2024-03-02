@@ -531,7 +531,7 @@ STEAMAPI_API HSteamUser GetHSteamUser()
 
 
 // exists only for backwards compat with code written against older SDKs
-STEAMAPI_API steam_bool S_CALLTYPE SteamAPI_InitSafe()
+STEAMAPI_API bool S_CALLTYPE SteamAPI_InitSafe()
 {
     PRINT_DEBUG("SteamAPI_InitSafe\n");
     SteamAPI_Init();

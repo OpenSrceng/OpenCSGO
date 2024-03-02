@@ -22,14 +22,14 @@
 //--------------------------------------------------------------------------------------
 // Light data
 //--------------------------------------------------------------------------------------
-schema struct WorldPointLightData_t
+vschema struct WorldPointLightData_t
 {
 	Vector m_vOrigin;
 	Vector4D m_vColorNRadius;
 	Vector m_vAttenuation;
 };
 
-schema struct WorldHemiLightData_t
+vschema struct WorldHemiLightData_t
 {
 	Vector4D m_vTransform0;		// Direction is z column
 	Vector4D m_vTransform1;		// Direction is z column
@@ -38,7 +38,7 @@ schema struct WorldHemiLightData_t
 	Vector m_vAttenuation;
 };
 
-schema struct WorldSpotLightData_t
+vschema struct WorldSpotLightData_t
 {
 	Vector4D m_vTransform0;		// Direction is z column
 	Vector4D m_vTransform1;		// Direction is z column
@@ -47,13 +47,13 @@ schema struct WorldSpotLightData_t
 	Vector4D m_vAttenuationNCosSpot;
 };
 
-schema struct SceneObject_t
+vschema struct SceneObject_t
 {
 	Vector4D								m_vTransform[3];
 	CResourceReference< Renderable_t >		m_Renderable;
 };
 
-schema struct WorldNode_t
+vschema struct WorldNode_t
 {
 	CResourceArray< SceneObject_t >			m_SceneObjects;				// List of scene objects in this node
 	CResourceArray< WorldPointLightData_t >	m_PointLights;				// TODO: These should actually become scene objects

@@ -43,7 +43,7 @@ void VGui_UpdateTextureListPanel() {}
 #include "materialsystem/itexture.h"
 #include "vtf/vtf.h"
 #include "tier2/tier2.h"
-#include "smartptr.h"
+#include "tier1/smartptr.h"
 
 #include "igame.h"
 

@@ -13,10 +13,16 @@ Context.Context.line_just = 60 # should fit for everything on 80x26
 
 PROJECTS = [
 	'appframework',
+	'bitmap',
+	'bonesetup',
 	'd3dx',
+	'dmxloader',
+	'engine',
 	'generated_proto',
 	'interfaces',
 	'mathlib',
+	'soundsystem/lowlevel',
+	'thirdparty/bzip2-1.0.8',
 	'thirdparty/cryptopp-8.9.0',
 	'thirdparty/dxvk-native-1.9.2b/src/d3d9',
 	'thirdparty/dxvk-native-1.9.2b/src/dxso',
@@ -27,12 +33,21 @@ PROJECTS = [
 	'thirdparty/dxvk-native-1.9.2b/src/wsi',
 	'thirdparty/freetype-2.13.2',
 	'thirdparty/goldberg_emulator/dll',
+	'thirdparty/jpeg-8',
+	'thirdparty/mojoAL',
 	'thirdparty/protobuf-3.6.1/src',
+	'thirdparty/quickhull',
+	'thirdparty/SDL-2.28.5',
+	'thirdparty/zlib-1.3.1',
 	'tier0',
 	'tier1',
 	'tier2',
 	'tier3',
-	'vstdlib'
+	'vgui2/matsys_controls',
+	'vgui2/vgui_controls',
+	'videocfg',
+	'vstdlib',
+	'vtf'
 ]
 
 @Configure.conf
@@ -46,9 +61,6 @@ def options(opt):
 
 	grp = opt.add_option_group('Common options')
 
-	grp.add_option('-8', '--64bits', action = 'store_true', dest = 'ALLOW64', default = False,
-		help = 'allow targetting 64-bit engine [default: %default]')
-
 	grp.add_option('-w', '--no-warnings', action = 'store_true', dest = 'NO_WARNINGS', default = False,
 		help = 'disable warnings [default: %default]')
 
@@ -59,7 +71,7 @@ def options(opt):
 
 def configure(conf):
 	conf.load('fwgslib reconfigure ndk compiler_optimizations')
-	conf.env.MSVC_TARGETS = ['x86' if not conf.options.ALLOW64 else 'x64']
+	conf.env.MSVC_TARGETS = ['x64']
 
 	# Force XP compatibility, all build targets should add subsystem=bld.env.MSVC_SUBSYSTEM
 	if conf.env.MSVC_TARGETS[0] == 'x86':
@@ -67,7 +79,6 @@ def configure(conf):
 	else:
 		conf.env.MSVC_SUBSYSTEM = 'WINDOWS'
 
-	conf.env.ALLOW64	=		conf.options.ALLOW64
 	conf.env.DEDICATED	=		conf.options.DEDICATED
 
 	if conf.env.DEST_OS == 'android':
@@ -156,16 +167,15 @@ def configure(conf):
 	if conf.env.COMPILER_CC == 'msvc':
 		conf.define('COMPILER_MSVC', True)
 		conf.define('_CRT_SECURE_NO_WARNINGS', True)
-		if conf.env.ALLOW64:
-			conf.define('COMPILER_MSVC64', True)
-		else:
-			conf.define('COMPILER_MSVC32', True)
+		conf.define('COMPILER_MSVC64', True)
 	elif conf.env.COMPILER_CC in ['gcc', 'clang']:
 		conf.define('COMPILER_GCC', True)
 
 	if conf.env.DEST_OS == 'win32': # TODO: IMPLETE ME!
 		conf.define('_WIN32', True)
 		conf.define('WIN32', True)
+		conf.define('_WIN64', True)
+		conf.define('WIN64', True)
 		conf.define('_DLL_EXT', '.dll', quote=False)
 	else:
 		conf.define('_POSIX', True)
@@ -192,6 +202,7 @@ def configure(conf):
 	conf.define('CSTRIKE_REL_BUILD', True)
 	conf.define('VPROF_LEVEL', True)
 	conf.define('RAD_TELEMETRY_DISABLED', True)
+	conf.define('VERSION_SAFE_STEAM_API_INTERFACES', True)
 
 	if conf.env.DEST_OS != 'win32':
 		conf.define('DX_TO_VK_ABSTRACTION', True)

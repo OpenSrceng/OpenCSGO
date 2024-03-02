@@ -55,7 +55,7 @@
 #include "Steam.h" // for SteamGetUser()
 #include "ivideomode.h"
 #include "cl_pluginhelpers.h"
-#include "cl_main.h" // CL_IsHL2Demo()
+#include "cl_main.h"
 #include "cl_steamauth.h"
 #include "inputsystem/iinputstacksystem.h"
 
@@ -1170,16 +1170,6 @@ void CEngineVGui::Shutdown()
 		m_pConstantColorMaterial = NULL;
 	}
 
-	if ( IsPC() && CL_IsHL2Demo() ) // if they are playing the demo then open the storefront on shutdown
-	{
-		system()->ShellExecute("open", "steam://store_demo/220");
-	}
-
-	if ( IsPC() && CL_IsPortalDemo() ) // if they are playing the demo then open the storefront on shutdown
-	{
-		vgui::system()->ShellExecute("open", "steam://store_demo/400");
-	}
-
 	DestroyVProfPanels();
 	bugreporter->Shutdown();
 	colorcorrectiontools->Shutdown();
@@ -1871,8 +1861,6 @@ void CEngineVGui::UpdateProgressBar( float progress, const char *pDesc, bool sho
 				float timeScale = host_timescale.GetFloat() * sv.GetTimescale();
 				if ( timeScale <= 0.0f )
 					timeScale = 1.0f;
-
-				g_pScaleformUI->RunFrame( g_ClientGlobalVariables.frametime / timeScale );
 			}
 			else
 			{
@@ -1882,7 +1870,6 @@ void CEngineVGui::UpdateProgressBar( float progress, const char *pDesc, bool sho
 	}
 	else if ( bUpdated )
 	{
-		g_pScaleformUI->RunFrame( 0 );
 		// re-render vgui on screen
 		extern void V_RenderVGuiOnly();
 		V_RenderVGuiOnly();
@@ -1931,8 +1918,6 @@ void CEngineVGui::UpdateSecondaryProgressBar( float progress, const wchar_t *des
 				float timeScale = host_timescale.GetFloat() * sv.GetTimescale();
 				if ( timeScale <= 0.0f )
 					timeScale = 1.0f;
-
-				g_pScaleformUI->RunFrame( g_ClientGlobalVariables.frametime / timeScale );
 			}
 			else
 			{
@@ -1942,7 +1927,6 @@ void CEngineVGui::UpdateSecondaryProgressBar( float progress, const wchar_t *des
 	}
 	else if ( bUpdated )
 	{
-		g_pScaleformUI->RunFrame( 0 );
 		// re-render vgui on screen
 		extern void V_RenderVGuiOnly();
 		V_RenderVGuiOnly();

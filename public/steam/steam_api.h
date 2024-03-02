@@ -6,9 +6,8 @@
 
 #ifndef STEAM_API_H
 #define STEAM_API_H
-#ifdef _WIN32
+
 #pragma once
-#endif
 
 #include "isteamclient.h"
 #include "isteamuser.h"

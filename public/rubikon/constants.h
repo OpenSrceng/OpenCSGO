@@ -170,8 +170,8 @@
 #define DEFAULT_JOINT_ERP	float( 0.1f )
 
 
-// dummy schema data: workaround for a build dependency issue
-schema struct RnDummy_t  
+// dummy vschema data: workaround for a build dependency issue
+vschema struct RnDummy_t  
 {
 	int32 m_nDummy;
 };

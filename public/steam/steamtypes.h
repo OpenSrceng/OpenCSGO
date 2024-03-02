@@ -6,9 +6,8 @@
 
 #ifndef STEAMTYPES_H
 #define STEAMTYPES_H
-#ifdef _WIN32
+
 #pragma once
-#endif
 
 #define S_CALLTYPE __cdecl
 
@@ -24,7 +23,7 @@ typedef unsigned char uint8;
 	#define POSIX 1
 #endif
 
-#if defined(__x86_64__) || defined(_WIN64)
+#if defined( PLATFORM_64BITS )
 #define X64BITS
 #endif
 

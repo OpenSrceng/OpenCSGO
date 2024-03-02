@@ -7,6 +7,8 @@
 // $NoKeywords: $
 //=============================================================================//
 
+#pragma once
+
 // main precompiled header for client files
 
 #include "platform.h"

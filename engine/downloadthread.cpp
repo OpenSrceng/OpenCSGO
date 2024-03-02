@@ -523,7 +523,7 @@ uintp DownloadThread( void *voidPtr )
 
 	return 0;
 }
-#elif defined( POSIX ) && !defined( DEDICATED )
+#elif 0 // defined( POSIX ) && !defined( DEDICATED )
 
 #include "curl/curl.h"
 

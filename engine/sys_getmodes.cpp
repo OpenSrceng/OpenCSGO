@@ -8,6 +8,7 @@
 #undef PROTECTED_THINGS_ENABLE
 #include "SDL.h"
 #include "SDL_syswm.h"
+#undef Status
 #endif
 
 #if defined( _WIN32 ) && !defined( _X360 )

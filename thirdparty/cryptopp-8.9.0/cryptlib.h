@@ -1193,6 +1193,8 @@ public:
 	virtual void CalculateDigest(byte *digest, const byte *input, size_t length)
 		{Update(input, length); Final(digest);}
 
+#undef Verify
+
 	/// \brief Verifies the hash of the current message
 	/// \param digest a pointer to the buffer of an \a existing hash
 	/// \return \p true if the existing hash matches the computed hash, \p false otherwise

@@ -265,9 +265,6 @@ void SCR_UpdateScreen( void )
 	CMatRenderContextPtr pRenderContext;
 	pRenderContext.GetFrom( materials );
 
-	pRenderContext->RenderScaleformSlot(SF_RESERVED_BEGINFRAME_SLOT);
-
-
 	if( EngineVGui()->IsGameUIVisible() || IsSteam3ClientGameOverlayActive() )
 	{
 		pRenderContext->AntiAliasingHint( AA_HINT_MENU );
@@ -301,10 +298,6 @@ void SCR_UpdateScreen( void )
 
 	// Draw world, etc.
 	V_RenderView();
-
-	pRenderContext.GetFrom( materials );
-	pRenderContext->RenderScaleformSlot(SF_RESERVED_ENDFRAME_SLOT);
-	pRenderContext.SafeRelease();
 
 	CL_TakeSnapshotAndSwap();	   
 

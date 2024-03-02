@@ -13,7 +13,7 @@
 #define DECLARE_SCHEMA_ENUM( X )
 
 
-schema enum multiplayerBreak_t
+vschema enum multiplayerBreak_t
 {
 	MULTIPLAYER_BREAK_SERVER,
 	MULTIPLAYER_BREAK_CLIENT
@@ -21,8 +21,8 @@ schema enum multiplayerBreak_t
 DECLARE_SCHEMA_ENUM( multiplayerBreak_t );
 
 
-// Runtime class compiled from schema class CPhysPartBreakableData (open file://src\public\mdlobjects\authphysmodel.h)
-schema class VpropBreakablePartData_t
+// Runtime class compiled from vschema class CPhysPartBreakableData (open file://src\public\mdlobjects\authphysmodel.h)
+vschema class VpropBreakablePartData_t
 {
 	TYPEMETA( MNoScatter )
 	DECLARE_SCHEMA_DATA_CLASS( VpropBreakablePartData_t );

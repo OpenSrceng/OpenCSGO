@@ -44,7 +44,7 @@
 #include "interfaces/interfaces.h"
 #include "vgui/ILocalize.h"
 
-#include "../utils/bzip2/bzlib.h"
+#include "../thirdparty/bzip2-1.0.8/bzlib.h"
 
 #if defined( _X360 )
 #include "xbox/xbox_win32stubs.h"

@@ -18,9 +18,6 @@
 #include "ienginetoolinternal.h"
 #include "server.h"
 #include "mathlib/IceKey.H"
-#include "steamdatagram/isteamdatagramclient.h"
-#include "steamdatagram/isteamdatagramserver.h"
-#include "steamdatagram/isteamnetworkingutils.h"
 #include "engine/inetsupport.h"
 
 #if !defined( _X360 ) && !defined( NO_STEAM )
@@ -236,20 +233,6 @@ static CUtlVectorMT< CUtlVector< pendingsocket_t > >	s_PendingSockets;
 CTSQueue<loopback_t *> s_LoopBacks[LOOPBACK_SOCKETS];
 static netpacket_t*	s_pLagData[MAX_SOCKETS];  // List of lag structures, if fakelag is set.
 
-ISteamDatagramTransportGameserver *g_pSteamDatagramGameserver = nullptr;
-ISteamDatagramTransportClient *g_pSteamDatagramClient = nullptr;
-ns_address g_addrSteamDatagramProxiedGameServer;
-
-static void CloseSteamDatagramClientConnection()
-{
-	if ( g_pSteamDatagramClient )
-	{
-		g_pSteamDatagramClient->Close();
-		g_pSteamDatagramClient = nullptr;
-	}
-	g_addrSteamDatagramProxiedGameServer.Clear();
-}
-
 unsigned short NET_HostToNetShort( unsigned short us_in )
 {
 	return htons( us_in );
@@ -439,13 +422,6 @@ void NET_CloseSocket( int hSocket, int sock = -1)
 				net_sockets[sock].hTCP = 0;
 				net_sockets[sock].bListening = false;
 			}
-		}
-
-		// If closing client socket, make sure we don't keep trying
-		// to talk to server
-		if ( sock == NS_CLIENT )
-		{
-			CloseSteamDatagramClientConnection();
 		}
 	}
 
@@ -1383,343 +1359,8 @@ static int NET_ReceiveRawPacket( int sock, void *buf, int len, ns_address *from 
 	if ( ret > 0 )
 		return ret;
 
-	// Still nothing?  Check proxied clients
-	if ( g_pSteamDatagramGameserver )
-	{
-		CSteamID remoteSteamID;
-		uint64 usecTimeRecv;
-		if ( sock == NS_SERVER )
-		{
-			ret = g_pSteamDatagramGameserver->RecvDatagram( buf, len, &remoteSteamID, &usecTimeRecv, STEAM_P2P_GAME_SERVER );
-			if ( ret > 0 )
-			{
-	            from->SetFromSteamID( remoteSteamID, STEAM_P2P_GAME_CLIENT );
-				from->m_AddrType = NSAT_PROXIED_CLIENT;
-				return ret;
-			}
-		}
-		else if ( sock == NS_HLTV )
-		{
-			ret = g_pSteamDatagramGameserver->RecvDatagram( buf, len, &remoteSteamID, &usecTimeRecv, STEAM_P2P_HLTV );
-			if ( ret > 0 )
-			{
-	            from->SetFromSteamID( remoteSteamID, STEAM_P2P_GAME_CLIENT );
-				from->m_AddrType = NSAT_PROXIED_CLIENT;
-				return ret;
-			}
-		}
-		else if ( sock == NS_HLTV1 )
-		{
-			ret = g_pSteamDatagramGameserver->RecvDatagram( buf, len, &remoteSteamID, &usecTimeRecv, STEAM_P2P_HLTV1 );
-			if ( ret > 0 )
-			{
-	            from->SetFromSteamID( remoteSteamID, STEAM_P2P_GAME_CLIENT );
-				from->m_AddrType = NSAT_PROXIED_CLIENT;
-				return ret;
-			}
-		}
-	}
-
-	// Still nothing?  Check proxied server
-	#ifndef DEDICATED
-		if ( sock == NS_CLIENT && ret <= 0 && g_pSteamDatagramClient && g_addrSteamDatagramProxiedGameServer.IsValid() )
-		{
-			//CSteamID remoteSteamID;
-			uint64 usecTimeRecv;
-			int ret = g_pSteamDatagramClient->RecvDatagram( buf, len, &usecTimeRecv, STEAM_P2P_GAME_CLIENT );
-			if ( ret > 0 )
-			{
-				*from = g_addrSteamDatagramProxiedGameServer;
-				//pReceiveData->usTime = usecTimeRecv;
-				return ret;
-			}
-		}
-	#endif
-
 	// nothing
 	return 0;
-}
-
-static bool NET_ReceiveDatagram_Helper( const int sock, netpacket_t * packet, bool &bNoMorePacketsInSocketPipe )
-{
-	Assert ( packet );
-	Assert ( net_multiplayer );
-
-#if defined( _DEBUG ) && !defined( _PS3 )
-	if ( recvpackets.GetInt() >= 0 )
-	{
-		unsigned long bytes;
-
-		int net_socket = net_sockets[packet->source].hUDP;
-		ioctlsocket( net_socket, FIONREAD, &bytes );
-
-		if ( bytes <= 0 )
-		{
-			bNoMorePacketsInSocketPipe = true;
-			return false;
-		}
-
-		if ( recvpackets.GetInt() == 0 )
-		{
-			bNoMorePacketsInSocketPipe = true;
-			return false;
-		}
-
-		recvpackets.SetValue( recvpackets.GetInt() - 1 );
-	}
-#endif
-
-	int ret = NET_ReceiveRawPacket( sock, packet->data, NET_MAX_MESSAGE, &packet->from );
-	bNoMorePacketsInSocketPipe = ( ret <= 0 );
-	if ( ret > 0 )
-	{
-		packet->wiresize = ret;
-
-		MEM_ALLOC_CREDIT();
-		CUtlMemoryFixedGrowable< byte, NET_COMPRESSION_STACKBUF_SIZE > bufVoice( NET_COMPRESSION_STACKBUF_SIZE );
-
-		unsigned int nVoiceBits = 0u;
-
-		if ( IsX360() || net_dedicatedForXbox )
-		{
-			// X360TBD: Check for voice data and forward it to XAudio
-			// For now, just pull off the 2-byte VDP header and shift the data
-			unsigned short nDataBytes = ( *( unsigned short * )packet->data );
-
-			// 0xFFFF check is necessary because our LAN is broadcasting Source Engine Query requests
-			// which uses the out of band header, 0xFFFFFFFF, so it's not an XBox VDP packet.
-			if ( nDataBytes != 0xFFFF )
-			{
-				Assert( nDataBytes > 0 && nDataBytes <= ret );
-
-				int nVoiceBytes = ret - nDataBytes - 2;
-				if ( nVoiceBytes > 0 )
-				{
-					if ( voice_verbose.GetBool() )
-					{
-						Msg( "* NET_ReceiveDatagram: receiving voice from %s (%d bytes)\n", ns_address_render( packet->from ).String(), nVoiceBytes );
-					}
-
-					byte *pVoice = (byte *)packet->data + 2 + nDataBytes;
-
-					nVoiceBits = (unsigned int)LittleShort( *( unsigned short *)pVoice );
-					unsigned int nExpectedVoiceBytes = Bits2Bytes( nVoiceBits );
-					pVoice += sizeof( unsigned short );
-					
-					CLZSS lzss;
-					if ( lzss.IsCompressed( pVoice ) )
-					{
-						unsigned int unDecompressedVoice = lzss.GetActualSize( pVoice );
-						if ( unDecompressedVoice != nExpectedVoiceBytes )
-						{
-							return false;
-						}
-
-						bufVoice.EnsureCapacity( unDecompressedVoice );
-
-						// Decompress it
-						unsigned int unCheck = lzss.SafeUncompress( pVoice, bufVoice.Base(), unDecompressedVoice );
-						if ( unCheck != unDecompressedVoice )
-						{
-							return false;
-						}
-
-						nVoiceBytes = unDecompressedVoice;
-					}
-					else
-					{
-						bufVoice.EnsureCapacity( nVoiceBytes );
-						Q_memcpy( bufVoice.Base(), pVoice, nVoiceBytes );
-					}
-				}
-
-				Q_memmove( packet->data, &packet->data[2], nDataBytes );
-
-				ret = nDataBytes;
-			}
-		}
-
-		packet->size = ret;
-		
-
-		if ( ret < NET_MAX_MESSAGE )
-		{
-			// Check for split message
-			if ( LittleLong( *(int *)packet->data ) == NET_HEADER_FLAG_SPLITPACKET )	
-			{
-				if ( !NET_GetLong( sock, packet ) )
-					return false;
-			}
-
-			// Now check if the data on the wire is encrypted?
-			CUtlMemoryFixedGrowable< byte, NET_COMPRESSION_STACKBUF_SIZE > memDecryptedAll( NET_COMPRESSION_STACKBUF_SIZE );
-			if ( LittleLong( *(int *)packet->data ) != CONNECTIONLESS_HEADER )
-			{
-				// If the channel has encryption then decrypt the packet
-				CNetChan * chan = NET_FindNetChannel( sock, packet->from );
-				if ( !chan )
-					return false;	// this is not an error during connect/disconnect, but non-connectionless packets must have a channel to process anyways
-
-				if ( const unsigned char *pubEncryptionKey = chan->GetChannelEncryptionKey() )
-				{
-					// Decrypt the packet
-					IceKey iceKey( 2 );
-					iceKey.set( pubEncryptionKey );
-
-					if ( ( packet->size % iceKey.blockSize() ) == 0 )
-					{
-						// Decrypt the message
-						memDecryptedAll.EnsureCapacity( packet->size );
-						unsigned char *pchCryptoBuffer = ( unsigned char * ) stackalloc( iceKey.blockSize() );
-						for ( int k = 0; k < ( int ) packet->size; k += iceKey.blockSize() )
-						{
-							iceKey.decrypt( ( const unsigned char * ) ( packet->data + k ), pchCryptoBuffer );
-							Q_memcpy( memDecryptedAll.Base() + k, pchCryptoBuffer, iceKey.blockSize() );
-						}
-
-						// Check how much random fudge we have
-						int numRandomFudgeBytes = *memDecryptedAll.Base();
-						if ( ( numRandomFudgeBytes > 0 ) && ( int( numRandomFudgeBytes + 1 + sizeof( int32 ) ) < packet->size ) )
-						{
-							// Fetch the size of the encrypted message
-							int32 numBytesWrittenWire = 0;
-							Q_memcpy( &numBytesWrittenWire, memDecryptedAll.Base() + 1 + numRandomFudgeBytes, sizeof( int32 ) );
-							int32 const numBytesWritten = BigLong( numBytesWrittenWire );	// byteswap from the wire
-
-							// Make sure the total size of the message matches the expectations
-							if ( int( numRandomFudgeBytes + 1 + sizeof( int32 ) +numBytesWritten ) == packet->size )
-							{
-								// Fix the packet to point at decrypted data!
-								packet->size = numBytesWritten;
-								Q_memcpy( packet->data, memDecryptedAll.Base() + 1 + numRandomFudgeBytes + sizeof( int32 ), packet->size );
-							}
-						}
-					}
-				}
-			}
-			
-			// Next check for compressed message
-			if ( LittleLong( *(int *)packet->data) == NET_HEADER_FLAG_COMPRESSEDPACKET )
-			{
-				byte *pCompressedData = packet->data + sizeof( unsigned int );
-
-				CLZSS lzss;
-				// Decompress
-				int actualSize = lzss.GetActualSize( pCompressedData );
-				if ( actualSize <= 0 || actualSize > NET_MAX_PAYLOAD )
-					return false;
-
-				MEM_ALLOC_CREDIT();
-				CUtlMemoryFixedGrowable< byte, NET_COMPRESSION_STACKBUF_SIZE > memDecompressed( NET_COMPRESSION_STACKBUF_SIZE );
-				memDecompressed.EnsureCapacity( actualSize );
-
-				unsigned int uDecompressedSize = lzss.SafeUncompress( pCompressedData, memDecompressed.Base(), actualSize );
-				if ( uDecompressedSize == 0 || ((unsigned int)actualSize) != uDecompressedSize )
-				{
-					return false;
-				}
-
-				// packet->wiresize is already set
-				Q_memcpy( packet->data, memDecompressed.Base(), uDecompressedSize );
-
-				packet->size = uDecompressedSize;
-			}
-
-			if ( nVoiceBits > 0 )
-			{
-				// 9th byte is flag byte
-				byte flagByte = *( (byte *)packet->data + sizeof( unsigned int ) + sizeof( unsigned int ) );
-				unsigned int unPacketBits = packet->size << 3;
-				int nPadBits = DECODE_PAD_BITS( flagByte );
-				unPacketBits -= nPadBits;
-
-				//check the CRC value in the original data packet
-				if( ShouldChecksumPackets() )  
-				{
-					//we still want to honor the old checksum so we need to do it here instead of the usual location in CNetChan::ProcessPacketHeader
-					//If the layout of the header ever changes this code will need to be updated.
-					int checkSumByteOffset = sizeof( unsigned int ) + sizeof( unsigned int ) + sizeof( byte );
-					packet->message.Seek( checkSumByteOffset << 3 );
-					int oldChecksum = packet->message.ReadUBitLong( 16 );
-					packet->message.Seek(0);
-
-					int rawDataByteOffset = sizeof( unsigned int ) + sizeof( unsigned int ) + sizeof( byte ) + sizeof( unsigned short );
-					void *pvData = packet->data + rawDataByteOffset;
-					int nCheckSumBytes = packet->size - rawDataByteOffset;
-					if ( nCheckSumBytes <= 0 || nCheckSumBytes > NET_MAX_PAYLOAD )
-					{
-						ConMsg ( "corrupted packet detected (checksumbytes %d)\n", nCheckSumBytes );
-						return false;
-					}
-
-					unsigned short usDataCheckSum = BufferToShortChecksum( pvData, nCheckSumBytes );
-					if ( usDataCheckSum != oldChecksum )
-					{
-						ConMsg ( "corrupted packet detected\n" );
-						return false;
-					}
-				}
-
-				// create the combined gamedata + voicedata packet
-				bf_write fixup;
-				fixup.SetDebugName( "X360 Fixup" );
-				fixup.StartWriting( packet->data, NET_MAX_MESSAGE, unPacketBits );
-				fixup.WriteBits( bufVoice.Base(), nVoiceBits );
-
-				// Make sure we have enough bits to read a final net_NOP opcode before compressing 
-				int nRemainingBits = fixup.GetNumBitsWritten() % 8;
-				if ( nRemainingBits > 0 &&  nRemainingBits <= (8-NETMSG_TYPE_BITS) )
-				{
-					CNETMsg_NOP_t nop;
-					nop.WriteToBuffer( fixup );
-				}
-
-				packet->size = fixup.GetNumBytesWritten();
-
-				//recompute the new CRC value in the header.
-				if( ShouldChecksumPackets() )
-				{
-					//CNetChan::ProcessPacketHeader will still be looking for the checksum so we need to generate one that will keep it happy.
-					int checkSumByteOffset = sizeof( unsigned int ) + sizeof( unsigned int ) + sizeof( byte );
-					fixup.SeekToBit( checkSumByteOffset << 3 );//seek to bit position of checksum
-
-					int rawDataByteOffset = sizeof( unsigned int ) + sizeof( unsigned int ) + sizeof( byte ) + sizeof( unsigned short );
-					void *pvData = packet->data + rawDataByteOffset;
-					int nCheckSumBytes = packet->size - rawDataByteOffset;
-					unsigned short newChecksum = BufferToShortChecksum( pvData, nCheckSumBytes );
-
-					fixup.WriteUBitLong( newChecksum, 16 );
-				}
-			}
-
-			return NET_LagPacket( true, packet );
-		}
-		else
-		{
-			ConDMsg ( "NET_ReceiveDatagram:  Oversize packet from %s\n", ns_address_render( packet->from ).String() );
-		}
-	}
-	else if ( ret == -1  )									// error?
-	{
-		NET_GetLastError();
-
-		switch ( net_error )
-		{
-		case WSAEWOULDBLOCK:
-		case WSAECONNRESET:
-		case WSAECONNREFUSED:
-			break;
-		case WSAEMSGSIZE:
-			ConDMsg ("NET_ReceivePacket: %s\n", NET_ErrorString(net_error));
-			break;
-		default:
-			// Let's continue even after errors
-			ConDMsg ("NET_ReceivePacket: %s\n", NET_ErrorString(net_error));
-			break;
-		}
-	}
-
-	return false;
 }
 
 #define NET_WS_PACKET_PROFILE 0
@@ -1739,28 +1380,6 @@ CON_COMMAND( net_show_packet_stats, "Displays UDP packet statistics and resets t
 #else
 #define NET_WS_PACKET_STAT( sock, var )
 #endif
-bool NET_ReceiveDatagram ( const int sock, netpacket_t * packet )
-{
-	for ( ;; )
-	{
-		bool bNoMorePacketsInSocketPipe = true;
-		bool bFoundGoodPacket = NET_ReceiveDatagram_Helper( sock, packet, bNoMorePacketsInSocketPipe );
-		if ( bFoundGoodPacket )
-		{
-			NET_WS_PACKET_STAT( sock, g_nSockUDPTotalGood );
-			return true;
-		}
-		if ( bNoMorePacketsInSocketPipe )
-		{
-			return false;
-		}
-		else
-		{
-			NET_WS_PACKET_STAT( sock, g_nSockUDPTotalBad );
-			// continue, this was a bad code that in old networking code would cause a packet processing hitch
-		}
-	}
-}
 
 netpacket_t *NET_GetPacket (int sock, byte *scratch )
 {
@@ -1799,13 +1418,10 @@ netpacket_t *NET_GetPacket (int sock, byte *scratch )
 		}
 
 		// then check UDP data 
-		if ( !NET_ReceiveDatagram( sock, &inpacket ) )
+		// at last check if the lag system has a packet for us
+		if ( !NET_LagPacket (false, &inpacket) )
 		{
-			// at last check if the lag system has a packet for us
-			if ( !NET_LagPacket (false, &inpacket) )
-			{
-				return NULL;	// we don't have any new packet
-			}
+			return NULL;	// we don't have any new packet
 		}
 	}
 	
@@ -2096,38 +1712,17 @@ static int NET_SendRawPacket( SOCKET s, const void *buf, int len, const ns_addre
 
 		case NSAT_PROXIED_GAMESERVER:
 		{
-			if ( !g_pSteamDatagramClient )
-			{
-				Assert( false );
-				Warning( "Tried to send packet to proxied gameserver, but no ISteamDatagramTransportClient\n" );
-				return -1;
-			}
-			if ( to != g_addrSteamDatagramProxiedGameServer )
-			{
-				Assert( false );
-				Warning( "Tried to send packet to proxied gameserver %s, but client is currently pointed at gameserver %s\n", ns_address_render( to ).String(), ns_address_render( g_addrSteamDatagramProxiedGameServer ).String() );
-				return -1;
-			}
-
-			EResult result = g_pSteamDatagramClient->SendDatagram( buf, len, to.m_steamID.GetSteamChannel() );
-			if ( result == k_EResultOK || result == k_EResultNoConnection )
-				return len;
+			Assert( false );
+			Warning( "Tried to send packet to proxied gameserver, but no ISteamDatagramTransportClient\n" );
+			return -1;
 		}
 		break;
 
 		case NSAT_PROXIED_CLIENT:
 		{
-			if ( !g_pSteamDatagramGameserver )
-			{
-				Assert( false );
-				Warning( "Tried to send packet to proxied client, but no ISteamDatagramTransportGameserver\n" );
-				return -1;
-			}
-
-			EResult result = g_pSteamDatagramGameserver->SendDatagram( buf, len, to.m_steamID.GetSteamID(), to.m_steamID.GetSteamChannel() );
-			if ( result == k_EResultOK )
-				return len;
-
+			Assert( false );
+			Warning( "Tried to send packet to proxied client, but no ISteamDatagramTransportGameserver\n" );
+			return -1;
 		}
 		break;
 	}
@@ -2207,8 +1802,6 @@ int NET_SendToImpl( SOCKET s, const char * buf, int len, const ns_address &to, i
 //			tolen - 
 // Output : int
 //-----------------------------------------------------------------------------
-bool CL_IsHL2Demo();
-bool CL_IsPortalDemo();
 static int NET_SendTo( bool verbose, SOCKET s, const char * buf, int len, const ns_address &to, int iGameDataLength )
 {	
 	int nSend = 0;
@@ -2220,14 +1813,6 @@ static int NET_SendTo( bool verbose, SOCKET s, const char * buf, int len, const 
 	{		
 		return len;
 	}
-
-	// Don't send anything out in VCR mode.. it just annoys other people testing in multiplayer.
-#ifndef DEDICATED
-	if ( ( CL_IsHL2Demo() || CL_IsPortalDemo() ) && !net_dedicated )
-	{
-		Error( "NET_SendTo: Error" );
-	}
-#endif // _WIN32
 
 	nSend = NET_SendToImpl
 	( 
@@ -2844,16 +2429,6 @@ void NET_CloseAllSockets (void)
 	// Close steam sockets as well
 	g_pSteamSocketMgr->Shutdown();
 	g_pSteamSocketMgr->Init();
-
-	// Shutdown steam datagram server, if we were listening
-	if ( g_pSteamDatagramGameserver )
-	{
-		g_pSteamDatagramGameserver->Destroy();
-		g_pSteamDatagramGameserver = NULL;
-	}
-
-	// Shutdown steam datagram client, if we have one
-	CloseSteamDatagramClientConnection();
 }
 
 /*
@@ -2944,104 +2519,6 @@ private:
 static CBindAddressHelper g_BindAddressHelper;
 #endif
 
-#ifndef DEDICATED
-
-// Initialize steam client datagram lib if we haven't already
-static bool CheckInitSteamDatagramClientLib()
-{
-	static bool bInittedNetwork = false;
-	if ( bInittedNetwork )
-		return true;
-
-	if ( !Steam3Client().SteamHTTP() )
-	{
-		Warning( "Cannot init steam datagram client, no Steam HTTP interface\n" );
-		return false;
-	}
-
-	// Locate the first PLATFORM path
-	char szAbsPlatform[MAX_FILEPATH] = "";
-	const char *pszConfigDir = "config";
-	g_pFullFileSystem->GetSearchPath( "PLATFORM", false, szAbsPlatform, sizeof(szAbsPlatform) );
-
-	char *semi = strchr( szAbsPlatform, ';' );
-	if ( semi )
-		*semi = '\0';
-
-	// Set partner.  Running in china?
-	ESteamDatagramPartner ePartner = k_ESteamDatagramPartner_Steam;
-	if ( CommandLine()->HasParm( "-perfectworld" ) )
-		ePartner = k_ESteamDatagramPartner_China;
-	int iPartnerMark = -1; // CSGO doesn't prune the config based on partner!
-
-	char szAbsConfigDir[ MAX_FILEPATH];
-	V_ComposeFileName( szAbsPlatform, pszConfigDir, szAbsConfigDir, sizeof(szAbsConfigDir) );
-	SteamDatagramClient_Init( szAbsConfigDir, ePartner, iPartnerMark );
-	bInittedNetwork = true;
-
-	return true;
-}
-
-void NET_PrintSteamdatagramClientStatus()
-{
-	if ( !g_pSteamDatagramClient )
-	{
-		Msg( "No steam datagram client connection active\n" );
-		return;
-	}
-	ISteamDatagramTransportClient::ConnectionStatus status;
-	g_pSteamDatagramClient->GetConnectionStatus( status );
-	int sz = status.Print( NULL, 0 );
-	CUtlMemory<char> buf;
-	buf.EnsureCapacity( sz );
-	char *p = buf.Base();
-	status.Print( p, sz );
-	for (;;)
-	{
-		char *newline = strchr( p, '\n' );
-		if ( newline )
-			*newline = '\0';
-		Msg( "%s\n", p );
-		if ( !newline )
-			break;
-		p = newline+1;
-	}
-}
-CON_COMMAND( steamdatagram_client_status, "Print steam datagram client status" )
-{
-	NET_PrintSteamdatagramClientStatus();
-}
-
-bool NET_InitSteamDatagramProxiedGameserverConnection( const ns_address &adr )
-{
-	Assert( adr.GetAddressType() == NSAT_PROXIED_GAMESERVER );
-
-	// Most common case - talking to the same server as before
-	if ( g_pSteamDatagramClient )
-	{
-		if ( g_addrSteamDatagramProxiedGameServer.m_steamID.GetSteamID() == adr.m_steamID.GetSteamID() )
-		{
-			g_addrSteamDatagramProxiedGameServer.m_steamID.SetSteamChannel( adr.m_steamID.GetSteamChannel() );
-			return true;
-		}
-
-		// We have a client, but it was to talk to a different server.  Clear our ticket!
-		g_pSteamDatagramClient->Close();
-		g_addrSteamDatagramProxiedGameServer.Clear();
-	}
-
-	// Get a client to talk to this server
-	g_pSteamDatagramClient = SteamDatagramClient_Connect( adr.m_steamID.GetSteamID() );
-	if ( !g_pSteamDatagramClient )
-		return false;
-
-	// OK, remember who we're talking to
-	g_addrSteamDatagramProxiedGameServer = adr;
-	return true;
-}
-
-#endif
-
 static void OpenSocketInternal( int nModule, int nSetPort, int nDefaultPort, const char *pName, int nProtocol, bool bTryAny )
 {
 	CUtlVector< CUtlString > vecBindableAddresses;
@@ -3124,10 +2601,6 @@ static void OpenSocketInternal( int nModule, int nSetPort, int nDefaultPort, con
 	{
 		g_pSteamSocketMgr->OpenSocket( *handle, nModule, nSetPort, nDefaultPort, pName, nProtocol, bTryAny );
 	}
-	#ifndef DEDICATED
-		if ( nModule == NS_CLIENT )
-			CheckInitSteamDatagramClientLib();
-	#endif
 }
 
 /*
@@ -4160,15 +3633,6 @@ void NET_Init( bool bIsDedicated )
 	NET_InitParanoidMode();
 
 	NET_SetMultiplayer( !!( g_pMatchFramework->GetMatchTitle()->GetTitleSettingsFlags() & MATCHTITLE_SETTING_MULTIPLAYER ) );
-
-	// Go ahead and create steam datagram client, and start measuring pings to data centers
-	#ifndef DEDICATED
-	if ( CheckInitSteamDatagramClientLib() )
-	{
-		if ( ::SteamNetworkingUtils() )
-			::SteamNetworkingUtils()->CheckPingDataUpToDate( 0.0f );
-	}
-	#endif
 }
 
 /*
@@ -4193,9 +3657,6 @@ void NET_Shutdown (void)
 
 	NET_CloseAllSockets();
 	NET_ConfigLoopbackBuffers( false );
-#ifndef DEDICATED
-	SteamDatagramClient_Kill();
-#endif
 
 #if defined(_WIN32)
 	if ( !net_noip )
@@ -4447,32 +3908,6 @@ bool NET_GetPublicAdr( netadr_t &adr )
 	return bRet;
 }
 
-void NET_SteamDatagramServerListen()
-{
-	// Receiving on steam datagram transport?
-	// We only open one interface object (corresponding to one UDP port).
-	// The other "sockets" are different channels on this interface
-	if ( sv_steamdatagramtransport_port.GetInt() == 0 )
-		return;
-	if ( g_pSteamDatagramGameserver )
-		return;
-
-	SteamDatagramErrMsg errMsg;
-	EResult result;
-	g_pSteamDatagramGameserver = SteamDatagram_GameserverListen( GetSteamUniverse(), sv_steamdatagramtransport_port.GetInt(), &result, errMsg );
-	if ( g_pSteamDatagramGameserver )
-	{
-		Msg( "Listening for Steam datagram transport on port %d\n", sv_steamdatagramtransport_port.GetInt() );
-	}
-	else
-	{
-		Warning( "SteamDatagram_GameserverListen failed with error code %d.  %s\n", result, errMsg );
-
-		// Clear the convar so we don't advertise that we are listening!
-		sv_steamdatagramtransport_port.SetValue( 0 );
-	}
-}
-
 void NET_TerminateConnection( int sock, const ns_address &peer )
 {
 #if defined( USE_STEAM_SOCKETS )
@@ -4482,10 +3917,6 @@ void NET_TerminateConnection( int sock, const ns_address &peer )
 		NET_TerminateSteamConnection( steamIDRemote );
 	}
 #endif
-#ifndef DEDICATED
-	if ( peer == g_addrSteamDatagramProxiedGameServer )
-		CloseSteamDatagramClientConnection();
-#endif		
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -4498,12 +3929,9 @@ void NET_TerminateConnection( int sock, const ns_address &peer )
 #undef Verify
 #endif
 
-#define bswap_16 __bswap_16
-#define bswap_64 __bswap_64
-
-#include "cryptlib.h"
-#include "rsa.h"
-#include "osrng.h"
+#include "../thirdparty/cryptopp-8.9.0/cryptlib.h"
+#include "../thirdparty/cryptopp-8.9.0/rsa.h"
+#include "../thirdparty/cryptopp-8.9.0/osrng.h"
 
 using namespace CryptoPP;
 typedef AutoSeededX917RNG<AES> CAutoSeededRNG;
@@ -4576,13 +4004,9 @@ bool NET_CryptVerifyServerCertificateAndAllocateSessionKey( bool bOfficial, cons
 			break;
 		case NSAT_PROXIED_GAMESERVER:
 		{
-			unCertIP = SteamNetworkingUtils()->GetIPForServerSteamIDFromTicket( from.m_steamID.GetSteamID() );
-			if ( unCertIP == 0 )
-			{
-				Warning( "NET_CryptVerifyServerCertificateAndAllocateSessionKey - cannot check signature for proxied server '%s', because we don't have an SDR ticket to that server.\n", ns_address_render( from ).String() );
-				Assert(false);
-				return false;
-			}
+			Warning( "NET_CryptVerifyServerCertificateAndAllocateSessionKey - cannot check signature for proxied server '%s', because we don't have an SDR ticket to that server.\n", ns_address_render( from ).String() );
+			Assert(false);
+			return false;
 			break;
 		}
 	}
@@ -4884,12 +4308,12 @@ CON_COMMAND( net_encrypt_key_generate, "Generate a public/private keypair" )
 		StringSink stringSinkPrivateKey( strPrivateKey );
 		CPoolAllocatedRNG rng;
 		RSAES_OAEP_SHA_Decryptor priv( rng.GetRNG(), cKeyBits );
-		priv.DEREncode( stringSinkPrivateKey );
+		priv.GetPrivateKey().Save( stringSinkPrivateKey );
 
 		// generate public key
 		StringSink stringSinkPublicKey( strPublicKey );
 		RSAES_OAEP_SHA_Encryptor pub( priv );
-		pub.DEREncode( stringSinkPublicKey );
+		pub.GetPublicKey().Save( stringSinkPublicKey );
 		bSuccess = true;
 	}
 	catch ( Exception e )

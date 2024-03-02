@@ -3365,12 +3365,6 @@ void _Host_RunFrame_Client( bool framefinished )
 	// Resend connection request if needed.
 	GetBaseLocalClient().RunFrame();
 
-	if ( CL_IsHL2Demo() || CL_IsPortalDemo() ) // don't need sv.IsDedicated() because ded servers don't run this
-	{
-		void CL_DemoCheckGameUIRevealTime();
-		CL_DemoCheckGameUIRevealTime();
-	}
-
 	Steam3Client().RunFrame();
 
 #if defined( _DEBUG )

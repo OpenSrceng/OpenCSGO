@@ -14,7 +14,8 @@
 
 #include <assert.h>
 
-#ifndef POSIX
+#ifndef USE_SDL
+
 class VoiceRecord_OpenAL : public IVoiceRecord
 {
 public:
@@ -32,13 +33,10 @@ IVoiceRecord* CreateVoiceRecord_DSound(int sampleRate) { return new VoiceRecord_
 #else
 
 #define min(a,b)  (((a) < (b)) ? (a) : (b))
-#ifdef OSX
-#include <Carbon/Carbon.h>
-#include <OpenAL/al.h>
-#else
-#include <AL/al.h>
-#endif
-#include "openal/alc.h"
+
+#define AL_LIBTYPE_STATIC
+#include "../../thirdparty/mojoAL/AL/al.h"
+#include "../../thirdparty/mojoAL/AL/alc.h"
 
 // ------------------------------------------------------------------------------
 // VoiceRecord_OpenAL

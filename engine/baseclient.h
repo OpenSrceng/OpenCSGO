@@ -19,7 +19,7 @@
 #include <keyvalues.h>
 #include <bitvec.h>
 #include <igameevents.h>
-#include "smartptr.h"
+#include "tier1/smartptr.h"
 #include "userid.h"
 #include "tier1/bitbuf.h"
 #include "steam/steamclientpublic.h"

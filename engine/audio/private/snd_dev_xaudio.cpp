@@ -12,7 +12,7 @@
 #include "client.h"
 #include "matchmaking/imatchframework.h"
 #include "tier2/tier2.h"
-#include "smartptr.h"
+#include "tier1/smartptr.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

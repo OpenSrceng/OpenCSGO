@@ -24,7 +24,7 @@ struct ParticleSystemDefinition_t;
 //-----------------------------------------------------------------------------
 
 //! dmeElementType = "DmeParticleSystemDefinition"
-schema struct ParticleSystemDefinition_t
+vschema struct ParticleSystemDefinition_t
 {
 	int32            max_particles;
 	int32            initial_particles;
