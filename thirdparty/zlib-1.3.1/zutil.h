@@ -29,6 +29,10 @@
 #  include <stdlib.h>
 #endif
 
+#ifdef POSIX
+#include "unistd.h"
+#endif
+
 #ifndef local
 #  define local static
 #endif

@@ -236,7 +236,7 @@ static HMODULE Sys_LoadLibraryGuts( const char *pLibraryName )
 	char str[1024];
 
 	// How to get a string out of a #define on the command line.
-	const char *pModuleExtension = DLL_EXT_STRING;	
+	const char *pModuleExtension = DLL_EXT_STRING;
 	const char *pModuleAddition = pModuleExtension;
 
 	Q_strncpy( str, pLibraryName, sizeof(str) );
@@ -314,7 +314,7 @@ static HMODULE Sys_LoadLibraryGuts( const char *pLibraryName )
 
 #elif defined( POSIX ) && !defined( _PS3 )
 	HMODULE ret = (HMODULE)dlopen( str, RTLD_NOW );
-	if ( ! ret )
+	if ( !ret )
 	{
 		const char *pError = dlerror();
 		if ( pError && ( strstr( pError, "No such file" ) == 0 ) && ( strstr( pError, "image not found") == 0 ) )
@@ -443,15 +443,11 @@ CSysModule *Sys_LoadModule( const char *pModuleName )
 		}
 
 		size_t cCwd = strlen( szCwd );
-		if ( strstr( pModuleName, "bin/") == pModuleName || ( szCwd[ cCwd - 1 ] == 'n'  && szCwd[ cCwd - 2 ] == 'i' && szCwd[ cCwd - 3 ] == 'b' )  )
-		{
-			// don't make bin/bin path
-			Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/%s", szCwd, pModuleName );
-		}
-		else
-		{
-			Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/bin/%s", szCwd, pModuleName );
-		}
+#ifdef POSIX
+		Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/bin/lib%s", szCwd, pModuleName );
+#else
+		Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/bin/%s", szCwd, pModuleName );
+#endif
 		hDLL = Sys_LoadLibrary( szAbsoluteModuleName );
 #endif // _PS3
 	}

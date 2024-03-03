@@ -18,8 +18,12 @@ PROJECTS = [
 	'd3dx',
 	'dmxloader',
 	'engine',
+	'filesystem',
 	'generated_proto',
+	'inputsystem',
 	'interfaces',
+	'launcher',
+	'launcher_main',
 	'mathlib',
 	'soundsystem/lowlevel',
 	'thirdparty/bzip2-1.0.8',
@@ -46,6 +50,7 @@ PROJECTS = [
 	'vgui2/matsys_controls',
 	'vgui2/vgui_controls',
 	'videocfg',
+	'vpklib',
 	'vstdlib',
 	'vtf'
 ]
