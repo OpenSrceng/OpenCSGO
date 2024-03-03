@@ -37,6 +37,7 @@ PROJECTS = [
 	'thirdparty/dxvk-native-1.9.2b/src/wsi',
 	'thirdparty/freetype-2.13.2',
 	'thirdparty/goldberg_emulator/dll',
+	'thirdparty/JoltPhysics-4.0.2/Jolt',
 	'thirdparty/jpeg-8',
 	'thirdparty/mojoAL',
 	'thirdparty/protobuf-3.6.1/src',
@@ -50,6 +51,7 @@ PROJECTS = [
 	'vgui2/matsys_controls',
 	'vgui2/vgui_controls',
 	'videocfg',
+	'vphysics',
 	'vpklib',
 	'vstdlib',
 	'vtf'
